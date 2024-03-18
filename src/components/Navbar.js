@@ -9,13 +9,13 @@ function Navbar() {
             <a href="#" onClick={() => console.log('Clicked!')} className="toggle-btn">	<i className="bx bx-menu" />
             </a>
           </div>
-          <div className="flex-grow-1 search-bar">
+          {/* <div className="flex-grow-1 search-bar">
             <div className="input-group">
               <button className="btn btn-search-back search-arrow-back" type="button"><i className="bx bx-arrow-back" /></button>
               <input type="text" className="form-control" placeholder="search" />
               <button className="btn btn-search" type="button"><i className="lni lni-search-alt" /></button>
             </div>
-          </div>
+          </div> */}
           <div className="right-topbar ms-auto">
             <ul className="navbar-nav">
               <li className="nav-item search-btn-mobile">
@@ -29,8 +29,8 @@ function Navbar() {
                 <div className="dropdown-menu dropdown-menu-end">
                   <a href="#" onClick={() => console.log('Clicked!')}>
                     <div className="msg-header">
-                      <h6 className="msg-header-title">6 New</h6>
-                      <p className="msg-header-subtitle">Application Messages</p>
+                      <h6 className="msg-header-title">6 Yeni Mesaj</h6>
+                      <p className="msg-header-subtitle">Mesajlar</p>
                     </div>
                   </a>
                   <div className="header-message-list">
@@ -179,8 +179,8 @@ function Navbar() {
                 <div className="dropdown-menu dropdown-menu-end">
                   <a href="#" onClick={() => console.log('Clicked!')}>
                     <div className="msg-header">
-                      <h6 className="msg-header-title">8 New</h6>
-                      <p className="msg-header-subtitle">Application Notifications</p>
+                      <h6 className="msg-header-title">8 Yeni Bildirim</h6>
+                      <p className="msg-header-subtitle">Bildirimler</p>
                     </div>
                   </a>
                   <div className="header-notifications-list">
@@ -292,27 +292,25 @@ function Navbar() {
                 <a className="nav-link dropdown-toggle dropdown-toggle-nocaret" href="#" onClick={() => console.log('Clicked!')} data-bs-toggle="dropdown">
                   <div className="d-flex user-box align-items-center">
                     <div className="user-info">
-                      <p className="user-name mb-0">Jessica Doe</p>
-                      <p className="designattion mb-0">Available</p>
+                      <p className="user-name mb-0">Ege Deniz</p>
+                      <p className="designattion mb-0">Yazılım Geliştirici</p>
                     </div>
-                    <img src="assets/images/avatars/avatar-1.png" className="user-img" alt="user avatar" />
+                    <img src="egedeniz.jpg" className="user-img" alt="user avatar" />
                   </div>
                 </a>
                 <div className="dropdown-menu dropdown-menu-end">	
-                  <a className="dropdown-item" href="#" onClick={() => console.log('Clicked!')}><i className="bx bx-user" /><span>Profile</span></a>
-                  <a className="dropdown-item" href="#" onClick={() => console.log('Clicked!')}><i className="bx bx-cog" /><span>Settings</span></a>
-                  <a className="dropdown-item" href="#" onClick={() => console.log('Clicked!')}><i className="bx bx-tachometer" /><span>Dashboard</span></a>
-                  <a className="dropdown-item" href="#" onClick={() => console.log('Clicked!')}><i className="bx bx-wallet" /><span>Earnings</span></a>
-                  <a className="dropdown-item" href="#" onClick={() => console.log('Clicked!')}><i className="bx bx-cloud-download" /><span>Downloads</span></a>
-                  <div className="dropdown-divider mb-0" />	<a className="dropdown-item" href="#" onClick={() => console.log('Clicked!')}><i className="bx bx-power-off" /><span>Logout</span></a>
+                  <a className="dropdown-item" href="#" onClick={() => console.log('Clicked!')}><i className="bx bx-user" /><span>Profil</span></a>
+                  <a className="dropdown-item" href="#" onClick={() => console.log('Clicked!')}><i className="bx bx-cog" /><span>Ayarlar</span></a>
+                  <a className="dropdown-item" href="#" onClick={() => console.log('Clicked!')}><i className="bx bx-tachometer" /><span>Panel</span></a>
+                  <div className="dropdown-divider mb-0" />	<a className="dropdown-item" href="#" onClick={() => console.log('Clicked!')}><i className="bx bx-power-off" /><span>Çıkış Yap</span></a>
                 </div>
               </li>
               <li className="nav-item dropdown dropdown-language">
                 <a className="nav-link dropdown-toggle dropdown-toggle-nocaret" href="#" onClick={() => console.log('Clicked!')} data-bs-toggle="dropdown">
                   <div className="lang d-flex">
-                    <div><i className="flag-icon flag-icon-um" />
+                    <div><i className="flag-icon flag-icon-tr" />
                     </div>
-                    <div><span>En</span>
+                    <div><span>TR</span>
                     </div>
                   </div>
                 </a>
