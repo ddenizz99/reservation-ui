@@ -11,3 +11,45 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+::-moz-selection {
+  background:#facf6e;
+  color:#fff;
+}
+::selection {
+  background:#facf6e;
+  color:#fff;
+}
+
+::-webkit-scrollbar {
+   width: 10px;
+   /* Sadece sağ taraftaki scroll a etki eder. */
+   height: 10px;
+   /* Sedece altta çıkan scroll a etki eder. */
+   background: #1a1e21;
+}
+
+::-webkit-scrollbar-button {
+   background: #1a1e21;
+}
+
+::-webkit-scrollbar-thumb {
+   background: #ff8b01;
+   border-radius: 15px;
+}
+
+::-webkit-scrollbar-track {
+   background: green;
+}
+
+::-webkit-scrollbar-corner {
+   background: violet;
+}
+
+::-webkit-resizer {
+   background: pink;
+}
+
+::-webkit-scrollbar-track-piece {
+   background: #ccced1;
+}

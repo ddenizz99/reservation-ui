@@ -1,4 +1,18 @@
-function Navbar() {
+import { useAuth } from "../../context/AuthContext";
+import { toggleMenuClickHandle } from '../../utils/functions';
+import PerfectScrollbar from 'react-perfect-scrollbar'
+
+import 'react-perfect-scrollbar/dist/css/styles.css';
+
+function NavbarLayout() {
+
+  const { setUser } = useAuth();
+
+  const logoutHandle = (e) => {
+    e.preventDefault();
+    setUser(false);
+  }
+
   return (
     <div>
       
@@ -6,7 +20,7 @@ function Navbar() {
       <header className="top-header">
         <nav className="navbar navbar-expand">
           <div className="left-topbar d-flex align-items-center">
-            <a href="#" onClick={() => console.log('Clicked!')} className="toggle-btn">	<i className="bx bx-menu" />
+            <a href="#" onClick={toggleMenuClickHandle} className="toggle-btn">	<i className="bx bx-menu" />
             </a>
           </div>
           {/* <div className="flex-grow-1 search-bar">
@@ -33,7 +47,7 @@ function Navbar() {
                       <p className="msg-header-subtitle">Mesajlar</p>
                     </div>
                   </a>
-                  <div className="header-message-list">
+                  <PerfectScrollbar className="header-message-list" style={{height:400}}>
                     <a className="dropdown-item" href="#" onClick={() => console.log('Clicked!')}>
                       <div className="d-flex align-items-center">
                         <div className="user-online">
@@ -166,7 +180,7 @@ function Navbar() {
                         </div>
                       </div>
                     </a>
-                  </div>
+                  </PerfectScrollbar>
                   <a href="#" onClick={() => console.log('Clicked!')}>
                     <div className="text-center msg-footer">View All Messages</div>
                   </a>
@@ -183,7 +197,7 @@ function Navbar() {
                       <p className="msg-header-subtitle">Bildirimler</p>
                     </div>
                   </a>
-                  <div className="header-notifications-list">
+                  <PerfectScrollbar className="header-notifications-list" style={{height:400}}>
                     <a className="dropdown-item" href="#" onClick={() => console.log('Clicked!')}>
                       <div className="d-flex align-items-center">
                         <div className="notify bg-light-primary text-primary"><i className="bx bx-group" />
@@ -282,7 +296,7 @@ function Navbar() {
                         </div>
                       </div>
                     </a>
-                  </div>
+                  </PerfectScrollbar>
                   <a href="#" onClick={() => console.log('Clicked!')}>
                     <div className="text-center msg-footer">View All Notifications</div>
                   </a>
@@ -302,7 +316,7 @@ function Navbar() {
                   <a className="dropdown-item" href="#" onClick={() => console.log('Clicked!')}><i className="bx bx-user" /><span>Profil</span></a>
                   <a className="dropdown-item" href="#" onClick={() => console.log('Clicked!')}><i className="bx bx-cog" /><span>Ayarlar</span></a>
                   <a className="dropdown-item" href="#" onClick={() => console.log('Clicked!')}><i className="bx bx-tachometer" /><span>Panel</span></a>
-                  <div className="dropdown-divider mb-0" />	<a className="dropdown-item" href="#" onClick={() => console.log('Clicked!')}><i className="bx bx-power-off" /><span>Çıkış Yap</span></a>
+                  <div className="dropdown-divider mb-0" />	<a className="dropdown-item" href="#" onClick={logoutHandle}><i className="bx bx-power-off" /><span>Çıkış Yap</span></a>
                 </div>
               </li>
               <li className="nav-item dropdown dropdown-language">
@@ -334,4 +348,4 @@ function Navbar() {
   );
 }
 
-export default Navbar;
+export default NavbarLayout;

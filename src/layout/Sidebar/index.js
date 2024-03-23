@@ -1,18 +1,21 @@
-function Sidebar() {
+import MetisMenu from '@metismenu/react';
+import { toggleMenuClickHandle, allert } from '../../utils/functions';
+import { NavLink, useLocation } from 'react-router-dom';
 
+function SidebarLayout() {
 
   const menuItems = [
     {
       title: 'Rezervasyonlar',
       icon: 'bx bx-calendar',
       iconColor: 'parent-icon icon-color-1',
-      url: '#'
+      url: '/'
     },
     {
       title: 'Misafirler',
       icon: 'bx bxs-user-rectangle',
       iconColor: 'parent-icon icon-color-3',
-      url: '#'
+      url: '/blank-page'
     },
     {
       title: 'Değerlendirmeler',
@@ -49,7 +52,13 @@ function Sidebar() {
     // Diğer menü öğelerini buraya ekleyin
   ];
 
+  const location = useLocation();
 
+  // Sidebar menüsündeki her bir NavLink bileşeni için, URL ile karşılaştırma yaparak aktif sınıfı ekleyin
+  const isActive = (path) => {
+      // window.location.pathname ile React Router'ın yerine useLocation hook'unu kullanıyoruz
+      return path === location.pathname ? 'mm-active' : '';
+  };
 
   return (
     <div>
@@ -62,43 +71,43 @@ function Sidebar() {
           <div>
             <h4 className="logo-text">Rezervasyon UI</h4>
           </div>
-          <a href="#" onClick={() => console.log('Clicked!')} className="toggle-btn ms-auto">
+          <a href="#" onClick={toggleMenuClickHandle} className="toggle-btn ms-auto">
             <i className="bx bx-menu" />
           </a>
         </div>
         {/*navigation*/}
-        <ul className="metismenu" id="menu">
+        <MetisMenu className="metismenu">
           {menuItems.map((item, index) => (
-            <li key={index}>
+            <li key={index} className={isActive(item.url)}>
               {item.subItems ? (
-                <a href="#" onClick={() => console.log('Clicked!')} className="has-arrow">
+                <NavLink to={item.url} className="has-arrow">
                   <div className={item.iconColor}>
                     <i className={item.icon} />
                   </div>
                   <div className="menu-title">{item.title}</div>
-                </a>
+                </NavLink>
               ) : (
-                <a href={item.url}>
+                <NavLink to={item.url}>
                   <div className={item.iconColor}>
                     <i className={item.icon} />
                   </div>
                   <div className="menu-title">{item.title}</div>
-                </a>
+                </NavLink>
               )}
               {item.subItems && (
                 <ul>
                   {item.subItems.map((subItem, subIndex) => (
                     <li key={subIndex}>
-                      <a href={subItem.url}>
+                      <NavLink to={subItem.url}>
                         <i className="bx bx-right-arrow-alt" /> {subItem.title}
-                      </a>
+                      </NavLink>
                     </li>
                   ))}
                 </ul>
               )}
             </li>
           ))}
-        </ul>
+        </MetisMenu>
         {/*end navigation*/}
       </div>
       {/*end sidebar-wrapper*/}
@@ -106,5 +115,5 @@ function Sidebar() {
   );
   }
   
-  export default Sidebar;
+  export default SidebarLayout;
   
