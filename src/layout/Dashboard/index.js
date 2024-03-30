@@ -5,6 +5,7 @@ import Switcher from '../../components/Dashboard/Switcher';
 import { Outlet } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import $ from 'jquery';
+import LocalStorageService from "../../services/LocalStorageService";
 
 export default function DashboardLayout() {
 
@@ -80,23 +81,12 @@ export default function DashboardLayout() {
 
     //script();
 
+    const localStorageService = new LocalStorageService();
+
     return (
         <div>
             <Helmet>
                 <title>Dashboard - Rezervasyon UI</title>
-                {/* <script src="assets/js/jquery.min.js"></script>
-                <script src="assets/plugins/simplebar/js/simplebar.min.js"></script>
-                <script src="assets/plugins/metismenu/js/metisMenu.min.js"></script>
-                <script src="assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js"></script>
-                <script src="assets/plugins/vectormap/jquery-jvectormap-2.0.2.min.js"></script>
-                <script src="assets/plugins/vectormap/jquery-jvectormap-world-mill-en.js"></script>
-                <script src="assets/plugins/vectormap/jquery-jvectormap-in-mill.js"></script>
-                <script src="assets/plugins/vectormap/jquery-jvectormap-us-aea-en.js"></script>
-                <script src="assets/plugins/vectormap/jquery-jvectormap-uk-mill-en.js"></script>
-                <script src="assets/plugins/vectormap/jquery-jvectormap-au-mill.js"></script>
-                <script src="assets/plugins/apexcharts-bundle/js/apexcharts.min.js"></script>
-                <script src="assets/js/index2.js"></script>
-	            <script src="assets/js/app.js"></script> */}
             </Helmet>
             {/* wrapper */}
             <div className="wrapper">
@@ -114,7 +104,6 @@ export default function DashboardLayout() {
                 <FooterLayout></FooterLayout>
             </div>
             <Switcher></Switcher>
-            {console.log(process.env.REACT_APP_API_URL)}
         </div>
     )
 }

@@ -12,6 +12,11 @@ code {
     monospace;
 }
 
+.validation-error-span {
+   margin-top: 3px;
+   color: #dc0000;
+}
+
 ::-moz-selection {
   background:#facf6e;
   color:#fff;

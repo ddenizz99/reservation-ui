@@ -1,16 +1,22 @@
-import { useAuth } from "../../context/AuthContext";
 import { toggleMenuClickHandle } from '../../utils/functions';
-import PerfectScrollbar from 'react-perfect-scrollbar'
+import PerfectScrollbar from 'react-perfect-scrollbar';
+import { useSelector, useDispatch } from 'react-redux';
+import { logout } from "../../store/authStore";
+import { authLogout } from '../../services/AuthService';
+import { toast } from 'react-toastify';
 
-import 'react-perfect-scrollbar/dist/css/styles.css';
+import 'react-perfect-scrollbar/dist/css/styles.css'; 
 
 function NavbarLayout() {
 
-  const { setUser } = useAuth();
+  const dispatch = useDispatch();
+  const userData = useSelector((state) => state.auth.user);
 
   const logoutHandle = (e) => {
     e.preventDefault();
-    setUser(false);
+    authLogout();
+    dispatch(logout());
+    toast.success('Oturum kapatıdı.');
   }
 
   return (
@@ -306,7 +312,7 @@ function NavbarLayout() {
                 <a className="nav-link dropdown-toggle dropdown-toggle-nocaret" href="#" onClick={() => console.log('Clicked!')} data-bs-toggle="dropdown">
                   <div className="d-flex user-box align-items-center">
                     <div className="user-info">
-                      <p className="user-name mb-0">Ege Deniz</p>
+                      <p className="user-name mb-0">{userData.full_name}</p>
                       <p className="designattion mb-0">Yazılım Geliştirici</p>
                     </div>
                     <img src="egedeniz.jpg" className="user-img" alt="user avatar" />

@@ -1,27 +1,52 @@
-import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
-import { Helmet } from "react-helmet";
 import $ from "jquery";
-import AuthService from "../../services/AuthService";
+import { authLogin } from "../../services/AuthService";
+import { useFormik, ErrorMessage  } from "formik";
+import { LoginSchema } from "../../utils/validations";
+import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from "react-redux";
+import { login } from "../../store/authStore";
+import { toast } from 'react-toastify';
 
 function Login() {
 
   const navigate = useNavigate();
-  const { setUser } = useAuth();
+  const dispatch = useDispatch();
 
-  const authService = new AuthService();
+  const [error, setError] = useState('');
+  const [alertType, setAlertType] = useState('danger');
+  const [isLoading, setIsLoading] = useState(false);
+  const { isAuthenticated } = useSelector((state) => state.auth);
 
-  const loginHandle = async(e) => {
-    e.preventDefault();
-    setUser({
-      id: 1,
-      userName: 'ddenizz99'
-    })
-    navigate('/');
-    //let authService = AuthService();
-    /* let result = await authService.login("egedeniz14400@gmail.com", "Ege1q2w3e");
-    await console.log(result); */
-  }
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/');
+    }
+  }, [isAuthenticated]);
+
+  const notifySuccess = () => toast.success('Başarılı bildirim!');
+  
+  const { handleSubmit, handleChange, values, touched, errors, dirty, isSubmitting } = useFormik({
+    initialValues: {
+      email: '',
+      password: ''
+    },
+    validationSchema: LoginSchema,
+    onSubmit: async (values) => {
+      setError('');
+      setIsLoading(true);
+      try {
+        let result = await authLogin(values.email, values.password);
+        setAlertType('success');
+        toast.success('Giriş başarılı.');
+        dispatch(login(result.decodedToken));
+        navigate('/');
+      } catch (error) {
+        setIsLoading(false);
+        setError(error.response.data.messages.error);
+      }
+    }
+  })
 
   const clickHandle = (event) => {
     event.preventDefault();
@@ -53,16 +78,22 @@ function Login() {
                       </div>
                       <div>
                         <div className="form-body">
-                          <form className="row g-3">
+                          <form className="row g-3" onSubmit={handleSubmit}>
                             <div className="col-12">
                               <label htmlFor="inputEmailAddress" className="form-label">E-posta</label>
-                              <input type="email" className="form-control" id="inputEmailAddress" placeholder="E-posta" />
+                              <input type="email" name="email" className="form-control" id="inputEmailAddress" placeholder="E-posta" value={values.email} onChange={handleChange} />
+                              {touched.email && errors.email ? (
+                                <div className="validation-error-span">{errors.email}</div>
+                              ) : null}
                             </div>
                             <div className="col-12">
-                              <label htmlFor="inputChoosePassword" className="form-label">Şifre</label>
+                              <label htmlFor="inputChoosePasw" className="form-label">Şifre</label>
                               <div className="input-group" id="show_hide_password">
-                                <input type="password" className="form-control border-end-0" id="inputChoosePassword" defaultValue={12345678} placeholder="Şifre" /> <a href="#" onClick={clickHandle} className="input-group-text bg-transparent"><i className="bx bx-hide" /></a>
+                                <input type="password" name="password" className="form-control border-end-0" id="inputChoosePasw" value={values.password} onChange={handleChange} placeholder="Şifre" /> <a href="#" onClick={clickHandle} className="input-group-text bg-transparent"><i className="bx bx-hide" /></a>
                               </div>
+                              {touched.password && errors.password ? (
+                                  <div className="validation-error-span">{errors.password}</div>
+                                ) : null}
                             </div>
                             <div className="col-md-6">
                               <div className="form-check form-switch">
@@ -74,13 +105,25 @@ function Login() {
                             </div>
                             <div className="col-12">
                               <div className="d-grid">
-                                <button onClick={loginHandle} className="btn btn-primary"><i className="bx bxs-lock-open" />Giriş Yap</button>
+                                <button type="submit" className="btn btn-primary" disabled={!dirty || isSubmitting}>
+                                  {isLoading ? (
+                                    <div className="d-flex justify-content-center">
+                                      <div className="spinner-border" role="status">
+                                        <span className="visually-hidden">Yükleniyor...</span>
+                                      </div>
+                                    </div>
+                                  ) : (<><i className="bx bxs-lock-open" />Giriş Yap</>)}
+                                  </button>
                               </div>
                             </div>
                             <div className="col-12 text-center">
-                              <p>Henüz bir hesabınız yok mu? <a href="authentication-signup.html">Kayıt Ol</a></p>
+                              <p>Henüz bir hesabınız yok mu? <a href="#" onClick={notifySuccess}>Kayıt Ol</a></p>
                             </div>
                           </form>
+                          {error ? (
+                            <div className={'alert alert-' + alertType} role="alert">{error}</div>
+                          ) : null}
+                          
                         </div>
                       </div>
                     </div>
@@ -96,7 +139,7 @@ function Login() {
         </div>
       </div>
       {/* end wrapper */}
-
+      
     </div>
   );
 }

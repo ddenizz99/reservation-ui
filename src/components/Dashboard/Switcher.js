@@ -1,19 +1,25 @@
-import $ from 'jquery';
+import { useDispatch, useSelector } from 'react-redux';
+import { setTheme } from '../../store/themeStore';
 
 function Switcher() {
+
+    const themeR = useSelector((state) => state.theme.theme);
+
+
+    const dispatch = useDispatch();
 
     const themeCostimizeHandle = (e) => {
         switch (e.target.id) {
             case 'darkmode':
-                $("html").attr("class", "dark-theme");
+                dispatch(setTheme("dark-theme"));
                 break;
 
             case 'lightmode':
-                $("html").attr("class", "light-theme");
+                dispatch(setTheme("light-theme"));
                 break;
 
             case 'darksidebar':
-                $("html").attr("class", "dark-sidebar");
+                dispatch(setTheme("dark-sidebar"));
                 break;
         
             default:
@@ -37,17 +43,17 @@ function Switcher() {
                 <h6 className="mb-0">Tema Varyasyonu</h6>
                 <hr />
                 <div className="form-check form-check-inline">
-                    <input className="form-check-input" type="radio" name="inlineRadioOptions" id="lightmode" onClick={themeCostimizeHandle} defaultValue="option1" defaultChecked />
+                    <input className="form-check-input" type="radio" name="inlineRadioOptions" id="lightmode" onClick={themeCostimizeHandle} defaultValue="option1" defaultChecked={themeR === "light-theme" ? true : false} />
                     <label className="form-check-label" htmlFor="lightmode">Açık</label>
                 </div>
                 <hr />
                 <div className="form-check form-check-inline">
-                    <input className="form-check-input" type="radio" name="inlineRadioOptions" id="darkmode" onClick={themeCostimizeHandle} defaultValue="option2" />
+                    <input className="form-check-input" type="radio" name="inlineRadioOptions" id="darkmode" onClick={themeCostimizeHandle} defaultValue="option2" defaultChecked={themeR === "dark-theme" ? true : false} />
                     <label className="form-check-label" htmlFor="darkmode">Karanlık</label>
                 </div>
                 <hr />
                 <div className="form-check form-check-inline">
-                    <input className="form-check-input" type="radio" name="inlineRadioOptions" id="darksidebar" onClick={themeCostimizeHandle} defaultValue="option3" />
+                    <input className="form-check-input" type="radio" name="inlineRadioOptions" id="darksidebar" onClick={themeCostimizeHandle} defaultValue="option3" defaultChecked={themeR === "dark-sidebar" ? true : false} />
                     <label className="form-check-label" htmlFor="darksidebar">Yarı Karanlık</label>
                 </div>
                 
