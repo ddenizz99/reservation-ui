@@ -23,46 +23,46 @@ export const authLogin = (email, password) => {
         setAuthorizationToken(token);
         
         return {
+            success: true,
             data: response.data,
             decodedToken
         };
     }).catch(error => {
-        /* if (error.response.status === 401) {
-            // 401 hatası için özel işleme
-            const message = error.response.data.message;
-            // Mesajı göster veya işle.
-          }
-      
-          return Promise.reject(error); */
-
+        
         if (error.response) {
             // Server tarafında hata oluştuğunda
             if (error.response.status === 401) {
-                const message = error.response.data.message;
+                const message = error.response.data.messages.error;
                 // Mesajı göster veya işle.
-                console.log(message);
+
+                return {
+                    success: false,
+                    messages: message
+                }
             }
             // Server hatası olduğunda bu kısmı işleyebilirsiniz
             if (error.response.status === 500 && error.response.data === "ERR_CONNECTION_REFUSED") {
                 const errorMessage = "Sunucuya bağlanırken bir sorun oluştu. Lütfen daha sonra tekrar deneyin.";
-                // Kullanıcıya bu hatayı göstermek için bir işlem yapabilirsiniz
-                // Örneğin, bir toast mesajı gösterebilirsiniz
-                // toast.error(errorMessage);
-                console.log(errorMessage);
+                
+                return {
+                    success: false,
+                    messages: errorMessage
+                }
             }
         } else if (error.request) {
             // İstek yapılamadığında (örneğin sunucu kapalıysa) buraya düşer
             const errorMessage = "Sunucuya bağlanırken bir sorun oluştu. Lütfen daha sonra tekrar deneyin.";
-            // Kullanıcıya bu hatayı göstermek için bir işlem yapabilirsiniz
-            // Örneğin, bir toast mesajı gösterebilirsiniz
-            // toast.error(errorMessage);
-            console.log(errorMessage);
+            
+            return {
+                success: false,
+                messages: errorMessage
+            }
         } else {
-            // Diğer hata türleri için burası işlenir
-            // Örneğin, ağ hatası gibi
-            // Genel bir hata mesajı gösterebilirsiniz
-            // toast.error("Bir hata oluştu. Lütfen tekrar deneyin.");
-            console.log("lan bir sıkıntı var bak")
+           
+            return {
+                success: false,
+                messages: "Bir hata oluştu. Lütfen tekrar deneyin."
+            }
         }
 
         return Promise.reject(error);

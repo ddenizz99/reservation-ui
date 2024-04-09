@@ -35,16 +35,19 @@ function Login() {
     onSubmit: async (values) => {
       setError('');
       setIsLoading(true);
-      try {
-        let result = await authLogin(values.email, values.password);
+
+      let result = await authLogin(values.email, values.password);
+
+      if (result.success) {
         setAlertType('success');
         toast.success('Giriş başarılı.');
         dispatch(login(result.decodedToken));
         navigate('/');
-      } catch (error) {
+      }else{
         setIsLoading(false);
-        setError(error.response.data.messages.error);
+        setError(result.messages);
       }
+    
     }
   })
 

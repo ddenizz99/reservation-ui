@@ -6,7 +6,7 @@ const localStorageService = new LocalStorageService();
 const themeData = localStorageService.getItem("theme");
 
 const initialState = {
-    theme: themeData ?? 'light',
+    theme: themeData ?? 'light-theme',
 };
 
 const themeSlice = createSlice({

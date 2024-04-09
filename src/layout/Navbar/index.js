@@ -313,7 +313,7 @@ function NavbarLayout() {
                   <div className="d-flex user-box align-items-center">
                     <div className="user-info">
                       <p className="user-name mb-0">{userData.full_name}</p>
-                      <p className="designattion mb-0">Yazılım Geliştirici</p>
+                      <p className="designattion mb-0">{userData.restaurant_name}</p>
                     </div>
                     <img src="egedeniz.jpg" className="user-img" alt="user avatar" />
                   </div>
