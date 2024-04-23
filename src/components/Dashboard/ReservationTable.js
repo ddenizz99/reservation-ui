@@ -7,15 +7,37 @@ const ReservationTable = ({data, isLoading}) => {
     const themeR = useSelector((state) => state.theme.theme);
     const columns = [
         {
-        name: 'Title',
-        selector: row => row.title,
-        sortable: true,
+          name: 'Durum',
+          selector: row => row.status,
+          sortable: true
         },
         {
-        name: 'Year',
-        selector: row => row.year,
-        sortable: true,
+          name: 'Alan',
+          selector: row => row.location_name,
+          sortable: true
         },
+        {
+          name: 'Saat',
+          selector: row => row.time,
+          sortable: true
+        },
+        {
+          name: 'Müşteri',
+          selector: row => row.customer_name,
+          sortable: true,
+          cell: row => <CustomCustomer row={row} />
+        },
+        {
+          name: 'Kişi',
+          selector: row => row.number_of_people,
+          sortable: true
+        },
+        {
+          name: 'Kayıt Zamanı',
+          selector: row => row.created_at,
+          sortable: true,
+          cell: row => <CustomAddedUser row={row} />,
+        }
     ];   
     
     createTheme('solarized', {
@@ -40,6 +62,14 @@ const ReservationTable = ({data, isLoading}) => {
         },
       }, 'dark');
 
+      const CustomCustomer = ({ row }) => (
+        <div>{row.customer_name}<br/>{row.customer_phone}</div>
+      );
+
+      const CustomAddedUser = ({ row }) => (
+        <div>{row.created_at}<br/>{row.added_user}</div>
+      );
+
     return (
         <div>
             <DataTable
@@ -47,7 +77,6 @@ const ReservationTable = ({data, isLoading}) => {
                 columns={columns}
                 data={data}
                 progressPending={isLoading}
-                selectableRows
                 theme={themeR === 'dark-theme' ? "solarized" : "" }
                 progressComponent={<LoadingIndicator padding="p-5" />}
             />
