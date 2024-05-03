@@ -5,6 +5,8 @@ import Dashboard from "./pages/Dashboard/Dashboard";
 import Blank from "./pages/Dashboard/Blank";
 import Login from "./pages/Auth/Login";
 import Page404 from "./pages/Dashboard/Page404";
+import InfoLayout from "./layout/Info";
+import ReservationInfo from "./pages/Info/ReservationInfo";
 
 const routes = [
     {
@@ -32,6 +34,16 @@ const routes = [
             {
                 path: 'login',
                 element: <Login />
+            }
+        ]
+    },
+    {
+        path: '/info',
+        element: <InfoLayout />,
+        children: [
+            {
+                path: 'reservation/:code',
+                element: <ReservationInfo />
             }
         ]
     },

@@ -62,7 +62,7 @@ const CountryCodeSelect = ({value, handleChange}) => {
 
     return (
         <Form.Group className="mb-3" controlId="formBasicTelephoneCodes">
-            <Form.Label>Telefon Kodu</Form.Label>
+            <Form.Label>Telefon Kodu <strong style={{color: '#dd4814'}}>*</strong></Form.Label>
             <Form.Select 
                 aria-label="Default select example" 
                 name="telephone_code" 

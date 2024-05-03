@@ -4,6 +4,7 @@ import ReservationTable from '../../components/Dashboard/ReservationTable';
 import InfoCard from '../../components/Dashboard/InfoCard';
 import DateControl from '../../components/Dashboard/DateControl';
 import CreateReservation from '../../components/Dashboard/CreateReservation';
+import ChangeReservationStatus from '../../components/Dashboard/ChangeReservationStatus';
 import { getByRestaurantId } from "../../services/ReservationService";
 
 function Dashboard() {
@@ -14,19 +15,26 @@ function Dashboard() {
   const [reservationData, setReservationData] = useState([]);
   const [error, setError] = useState('');
 
+
+  /*MODALS*/
+  const [modalItemId, setModalItemId] = useState(0);
+  const [changeReservationShow, setChangeReservationShow] = useState(false);
+
   useEffect(() => {
     // Async fonksiyonu useEffect içerisinde tanımlıyoruz.
     const fetchData = async () => {
       setIsLoading(true);
+      setError('');
       //await new Promise(r => setTimeout(r, 1000));
-      await getByRestaurantId()
+      await getByRestaurantId(formatDateToDatabaseFormat(date))
         .then(result => {
             if(result.success){
-                console.log(result.data)
                 setReservationData(result.data);
                 setIsLoading(false);
             }else{
+                result.data = [];
                 setIsLoading(false);
+                setReservationData(result.data);
                 setError(result.message);
             }
         }).catch(result => {
@@ -39,7 +47,7 @@ function Dashboard() {
     // Tanımlanan async fonksiyonu çağırıyoruz.
     fetchData();
     //console.log(formatDateToDatabaseFormat(date, "full"));
-  }, [date]); 
+  }, [date, changeReservationShow]); 
 
   function formatDateToDatabaseFormat(date, time = 'day') {
     if (time === 'full') {
@@ -79,29 +87,7 @@ function Dashboard() {
     return result;
   }
 
-  //DataTable
-  const data = [
-      {
-        id: 1,
-        title: 'Beetlejuice',
-        year: '1988',
-      },
-      {
-        id: 2,
-        title: 'Ghostbusters',
-        year: '1984',
-      },
-      {
-        id: 3,
-        title: 'Bursaspor',
-        year: '1963',
-      },
-      {
-        id: 4,
-        title: 'Galatasaray',
-        year: '1905',
-      },
-  ]
+  const handleClose = () => {setCreateReservationShow(false); setDate(new Date());}
 
   return (
     <div>
@@ -128,7 +114,7 @@ function Dashboard() {
         setDate={setDate}
       />
 
-      <div className="btn-group m-1" role="group" aria-label="Basic example">
+      {/* <div className="btn-group m-1" role="group" aria-label="Basic example">
         <button type="button" className="btn btn-secondary">Left</button>
         <button type="button" className="btn btn-secondary">Middle</button>
         <button type="button" className="btn btn-secondary">Right</button>
@@ -138,7 +124,7 @@ function Dashboard() {
         <button type="button" className="btn btn-secondary">Left</button>
         <button type="button" className="btn btn-secondary">Middle</button>
         <button type="button" className="btn btn-secondary">Right</button>
-      </div>
+      </div> */}
 
 
       <div className="row mt-5">
@@ -154,7 +140,7 @@ function Dashboard() {
         <div className="col-12 col-lg-3">
           <InfoCard
             title="Konfirme"
-            value={countStatus(String(2))}
+            value={countStatus(String(2)) + countStatus(String(7))}
             icon="bx-check"
             backGround="primary-blue"
             isLoading={isLoading}
@@ -179,11 +165,12 @@ function Dashboard() {
           />
         </div>
         <div className='col-12 mb-4'>
-          <ReservationTable data={reservationData} isLoading={isLoading}></ReservationTable>
+          <ReservationTable data={reservationData} isLoading={isLoading} error={error} setModalItemId={setModalItemId} setChangeReservationShow={setChangeReservationShow}></ReservationTable>
         </div>
       </div>
 
-      <CreateReservation show={createReservationShow} handleClose={() => setCreateReservationShow(false)}></CreateReservation>
+      <CreateReservation show={createReservationShow} handleClose={handleClose}></CreateReservation>
+      <ChangeReservationStatus modalItemId={modalItemId} setModalItemId={setModalItemId} title={'Durum Değiştir'} show={changeReservationShow} setShow={setChangeReservationShow}></ChangeReservationStatus>
 
     </div>
   );

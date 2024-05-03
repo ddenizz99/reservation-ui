@@ -2,7 +2,7 @@ import { Form, Spinner } from 'react-bootstrap';
 import { getByRestaurantId } from "../../../services/LocationService";
 import { useState, useEffect  } from 'react';
  
-const LocationRadio = ({value, handleChange}) => {
+const LocationRadio = ({value, handleChange, touched, errors}) => {
 
   const [locationData, setLocationData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -51,6 +51,11 @@ const LocationRadio = ({value, handleChange}) => {
             <Form.Control.Feedback type="invalid" style={{ display: error ? 'block' : 'none' }}>
                 {error}
             </Form.Control.Feedback>
+            {touched && errors ? (
+                <Form.Text className="text-muted text-danger">
+                    {errors}
+                </Form.Text>
+            ) : null}
         </Form>
       );
 };

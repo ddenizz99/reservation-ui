@@ -1,7 +1,7 @@
 import { ButtonGroup, ToggleButton, Tabs, Tab } from 'react-bootstrap';
 import Form from 'react-bootstrap/Form';
 
-const NumberOfPeople = ({value, setFieldValue}) => {
+const NumberOfPeople = ({value, setFieldValue, touched, errors}) => {
 
   const people = [
     '1', '2', '3', '4', 
@@ -41,6 +41,11 @@ const NumberOfPeople = ({value, setFieldValue}) => {
                         </ToggleButton>
                     ))}
                 </ButtonGroup>
+                {touched && errors ? (
+                    <Form.Text className="text-muted text-danger">
+                        {errors}
+                    </Form.Text>
+                ) : null}
             </div>
             <div className='col-md-6 text-center' style={{display: "flex", justifyContent: "center", alignItems: "center"}}>
                 <Form.Select aria-label="Default select example" name="number_of_people" value={value} onChange={(e) => setFieldValue('number_of_people', e.currentTarget.value, false)}>

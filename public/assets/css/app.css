@@ -5288,3 +5288,13 @@ ul.icons li span {
 	}
 
 }
+
+/*datatable*/
+.rdt_TableRow {
+	font-weight: 600 !important;
+	text-align: center;
+}
+
+.rdt_TableHeadRow {
+	text-align: center;
+}

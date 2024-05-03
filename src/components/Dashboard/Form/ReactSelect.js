@@ -1,24 +1,56 @@
+import { useEffect, useState } from 'react';
 import AsyncCreatableSelect from 'react-select/async-creatable';
+import { getByRestaurantId } from "../../../services/CustomerService";
+import { FaPhoneAlt } from "react-icons/fa";
 
-export default function ReactSelect({ setIsOpenCustomerCreation, setNewCustomerName }) {
+export default function ReactSelect({ setIsOpenCustomerCreation, setNewCustomerName, options, setOptions, value, setFieldValue }) {
 
-    const handleCreate = (inputValue) => {
-        // Yeni seçenek oluşturulduğunda bu fonksiyon tetiklenir
-        console.log("Yeni öğe oluşturuldu:", inputValue);
-        setNewCustomerName(inputValue);
-        setIsOpenCustomerCreation(true); // Kayıt formunu aç
+  const [customerData, setCustomerData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchCustomerData = async () => {
+        setIsLoading(true);
+        setError(null);
+        await getByRestaurantId()
+        .then(result => {
+            if(result.success){
+                setCustomerData(result.data);
+                setIsLoading(false);
+            }else{
+                setIsLoading(false);
+                //setError(result.message);
+            }
+        }).catch(result => {
+            setIsLoading(false);
+            setError(String(result));
+        });
     };
 
-    const options = [
-        { value: 'Ali Kaya', label: 'Ali Kaya' },
-        { value: 'Mehmet Ata', label: 'Mehmet Ata' },
-        { value: 'Aslı Korkmaz', label: 'Aslı Korkmaz' },
-      ];
+    fetchCustomerData();
+}, []);
+
+    const handleCreate = (inputValue) => {
+        setNewCustomerName(inputValue);
+        setIsOpenCustomerCreation(true); // Kayıt formunu aç
+        setFieldValue('customer_id', '')
+    };
     
     const filterColors = (inputValue) => {
-      return options.filter((i) =>
-        i.label.toLowerCase().includes(inputValue.toLowerCase())
+      setOptions([]);
+      let filterData = customerData.filter(person =>
+          person.full_name.toLowerCase().includes(inputValue.toLowerCase()) ||
+          person.phone.includes(inputValue) ||
+          person.email.toLowerCase().includes(inputValue.toLowerCase())
       );
+
+      var newOptions = [];
+      filterData.forEach((item) => {
+        newOptions.push({ value: item.id, label: <div>{item.full_name}<br/><FaPhoneAlt style={{margin:3}}/>{item.phone}<br/>{item.email}</div>});
+      });
+      setOptions(newOptions);
+      return newOptions;
     };
     
     const promiseOptions = (inputValue) =>
@@ -30,12 +62,15 @@ export default function ReactSelect({ setIsOpenCustomerCreation, setNewCustomerN
 
   return (
     <AsyncCreatableSelect
-          cacheOptions
-          defaultOptions
+          //cacheOptions
+          //defaultOptions
           onCreateOption={handleCreate}
           loadOptions={promiseOptions}
-          placeholder="Yeni misafir ekleyebilir veya mevcut misafirlerden seçebilirsiniz."
+          placeholder={error ?? "Yeni misafir ekleyebilir veya mevcut misafirlerden seçebilirsiniz."}
+          isDisabled={error}
           closeMenuOnScroll
+          value={options.find(option => option.value === value)}
+          onChange={option => setFieldValue('customer_id', option.value)}
           loadingMessage={() => "Yükleniyor..."}
           formatCreateLabel={(inputValue) => `Yeni müşteri ekle: "${inputValue}"`}
       />  

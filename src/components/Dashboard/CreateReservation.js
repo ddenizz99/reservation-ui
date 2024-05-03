@@ -16,6 +16,7 @@ import LanguageSelect from "./Form/LanguageSelect";
 import CountryCodeSelect from "./Form/CountryCodeSelect";
 import { addReservation } from "../../services/ReservationService";
 import { toast } from 'react-toastify';
+import { createReservationSchema } from '../../utils/validations/GlobalSchema'
 
 const CreateReservation = ({ show, handleClose }) => {
 
@@ -24,6 +25,7 @@ const CreateReservation = ({ show, handleClose }) => {
     const [finishButton, setFinishButton] = useState(false);
     const [isOpenCustomerCreation, setIsOpenCustomerCreation] = useState(false);
     const [newCustomerName, setNewCustomerName] = useState('');
+    const [customerOptions, setCustomerOptions] = useState([]);
 
     const [error, setError] = useState('');
     const [alertType, setAlertType] = useState('danger');
@@ -78,6 +80,7 @@ const CreateReservation = ({ show, handleClose }) => {
     };
 
     function formatDateToDatabaseFormat(date, time = 'day') {
+        date = new Date(date);
         if (time === 'full') {
             const year = date.getFullYear();
             const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -107,7 +110,7 @@ const CreateReservation = ({ show, handleClose }) => {
             time: '',
             tags: [],
             email: '',
-            language: '1',
+            language: 'tr',
             telephone_code: '237',
             level: '',
             vip: false,
@@ -116,26 +119,12 @@ const CreateReservation = ({ show, handleClose }) => {
             location: '',
             number_of_people: '',
         },
-        //validationSchema: LoginSchema,
-        onSubmit: async (values, { resetForm }) => {
+        validationSchema: createReservationSchema(newCustomerName),
+        onSubmit: async (values) => {
             values.date = formatDateToDatabaseFormat(values.date);
             setError('');
             setIsLoading(true);
-            //console.log(JSON.stringify(values, null, 2));
-
-            //resetForm();
-            //CreateReservationDestroy();
-        
-            //apiye git
-        
-            /* if (result.success) {
-                setAlertType('success');
-                alert('yes');
-            }else{
-                setIsLoading(false);
-                setError(result.messages);
-            } */
-            //handleClose();
+            
             await addReservation(values)
                 .then(result => {
                     if(result.success){
@@ -154,7 +143,7 @@ const CreateReservation = ({ show, handleClose }) => {
                     setError(String(result));
                     toast.error(String(result));
                 });
-        
+                
         }
     })
 
@@ -186,26 +175,36 @@ const CreateReservation = ({ show, handleClose }) => {
                                     <ReactSelect 
                                         setIsOpenCustomerCreation={setIsOpenCustomerCreation}
                                         setNewCustomerName={setNewCustomerName}
+                                        options={customerOptions}
+                                        setOptions={setCustomerOptions}
+                                        value={values.customer_id}
+                                        setFieldValue={setFieldValue}
                                     />
+                                    {touched.customer_id && errors.customer_id ? (
+                                        <div className="validation-error-span">{errors.customer_id}</div>
+                                    ) : null}
                                 </>
                             ):(
                                 <>
                                     <div className="col-md-12 mt-3">
                                         <div className="row">
                                             <div className="col-md-12 mb-3">
-                                                <Button variant="secondary" onClick={() => setIsOpenCustomerCreation(false)} style={{textTransform: "none"}}>Farklı bir misafir seçmek istiyorum.</Button>
+                                                <Button variant="secondary" onClick={() => CreateReservationDestroy()} style={{textTransform: "none"}}>Farklı bir misafir seçmek istiyorum.</Button>
                                             </div>
                                             <div className="col-md-12 text-start">
                                                 <div className="row">
 
                                                     <div className="col-md-6">
                                                         <Form.Group className="mb-3" controlId="formBasicFullName">
-                                                            <Form.Label>Ad Soyad</Form.Label>
+                                                            <Form.Label>Ad Soyad <strong style={{color: '#dd4814'}}>*</strong></Form.Label>
                                                             <Form.Control type="text" name="full_name" placeholder="Müşteri adı" value={values.full_name} onChange={handleChange} />
-                                                            {/* <Form.Text className="text-muted">
-                                                                We'll never share your email with anyone else.
-                                                            </Form.Text> */}
+                                                            {touched.full_name && errors.full_name ? (
+                                                                <Form.Text className="text-muted text-danger">
+                                                                    {errors.full_name}
+                                                                </Form.Text>
+                                                            ) : null}
                                                         </Form.Group>
+                                                        
                                                     </div>
 
                                                     <div className="col-md-6">
@@ -214,12 +213,22 @@ const CreateReservation = ({ show, handleClose }) => {
 
                                                     <div className="col-md-6">
                                                         <CountryCodeSelect value={values.telephone_code} handleChange={handleChange}></CountryCodeSelect>
+                                                        {touched.telephone_code && errors.telephone_code ? (
+                                                            <Form.Text className="text-muted text-danger">
+                                                                {errors.telephone_code}
+                                                            </Form.Text>
+                                                        ) : null}
                                                     </div>
 
                                                     <div className="col-md-6">
                                                         <Form.Group className="mb-3" controlId="formBasicTelephone">
-                                                            <Form.Label>Telefon</Form.Label>
+                                                            <Form.Label>Telefon <strong style={{color: '#dd4814'}}>*</strong></Form.Label>
                                                             <Form.Control type="text" name="phone" placeholder="5xxxxxxx" value={values.phone} onChange={handleChange} />
+                                                            {touched.phone && errors.phone ? (
+                                                                <Form.Text className="text-muted text-danger">
+                                                                    {errors.phone}
+                                                                </Form.Text>
+                                                            ) : null}
                                                         </Form.Group>
                                                     </div>
 
@@ -227,6 +236,11 @@ const CreateReservation = ({ show, handleClose }) => {
                                                         <Form.Group className="mb-3" controlId="formBasicEmail">
                                                             <Form.Label>E-posta</Form.Label>
                                                             <Form.Control type="email" name="email" placeholder="E-posta adresi" value={values.email} onChange={handleChange} />
+                                                            {touched.email && errors.email ? (
+                                                                <Form.Text className="text-muted text-danger">
+                                                                    {errors.email}
+                                                                </Form.Text>
+                                                            ) : null}
                                                         </Form.Group>
                                                     </div>
 
@@ -252,6 +266,11 @@ const CreateReservation = ({ show, handleClose }) => {
                                                                 value={values.customer_note} 
                                                                 onChange={handleChange} 
                                                             />
+                                                            {touched.customer_note && errors.customer_note ? (
+                                                                <Form.Text className="text-muted text-danger">
+                                                                    {errors.customer_note}
+                                                                </Form.Text>
+                                                            ) : null}
                                                         </Form.Group>
                                                     </div>
 
@@ -268,8 +287,8 @@ const CreateReservation = ({ show, handleClose }) => {
                         <FormWizard.TabContent title="Rezervasyon Bilgileri" icon="ti-settings">
 
                             <div className="col-md-12 mt-5 text-start">
-                                <NumberOfPeople value={values.number_of_people} setFieldValue={setFieldValue}></NumberOfPeople>
-                                <LocationRadio className="mb-3 mt-3" value={values.location} handleChange={handleChange}></LocationRadio>
+                                <NumberOfPeople value={values.number_of_people} setFieldValue={setFieldValue} touched={touched.number_of_people} errors={errors.number_of_people}></NumberOfPeople>
+                                <LocationRadio className="mb-3 mt-3" value={values.location} handleChange={handleChange} touched={touched.location} errors={errors.location}></LocationRadio>
                                 <TagsSelection className="mb-3 mt-3" value={values.tags} setFieldValue={setFieldValue}></TagsSelection>
                                 <Form.Group className="mb-3 mt-3" controlId="formBasicTagsNotes">
                                     <Form.Label>Not</Form.Label>
@@ -288,10 +307,20 @@ const CreateReservation = ({ show, handleClose }) => {
                         <FormWizard.TabContent title="Tarih/Saat" icon="ti-check">
                             <div className="col-12 mt-5">
                                 <SelectDate value={values.date} setFieldValue={setFieldValue}></SelectDate>
+                                {touched.date && errors.date ? (
+                                    <Form.Text className="text-muted text-danger">
+                                        {errors.date}
+                                    </Form.Text>
+                                ) : null}
                             </div>
                             
                             <div className="col-12 mt-5">
                                 <TimePicker value={values.time} setFieldValue={setFieldValue}></TimePicker>
+                                {touched.time && errors.time ? (
+                                    <Form.Text className="text-muted text-danger">
+                                        {errors.time}
+                                    </Form.Text>
+                                ) : null}
                             </div>
                         </FormWizard.TabContent>
                     </FormWizard>

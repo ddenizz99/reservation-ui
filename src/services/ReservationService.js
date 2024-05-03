@@ -14,20 +14,76 @@ const addReservation = async (reservationData) => {
     }
 };
 
-const getByRestaurantId = async () => {
+const getByRestaurantId = async (date) => {
     try {
-      const response = await axiosInstance.get('/reservation/getByRestaurantId');
-      if (response.data.success) {
-        return response.data;
-      } else {
-        throw new Error(response.data.message);
-      }
+      const response = await axiosInstance.get('/reservation/getByRestaurantId/' + date);
+      return response.data;
     } catch (error) {
       console.error('API Hata:', error.message);
       throw error;
     }
 };
 
-export { addReservation, getByRestaurantId };
+const getByInfoCode = async (code) => {
+  try {
+    const response = await axiosInstance.get('/info/getByInfoCode/' + code);
+    return response.data;
+  } catch (error) {
+    console.error('API Hata:', error.message);
+    throw error;
+  }
+};
+
+const getById = async (itemId) => {
+  try {
+    const response = await axiosInstance.get(`/reservation/getById/${itemId}`);
+    return response.data;
+  } catch (error) {
+    console.error('API Hata:', error.message);
+    throw error;
+  }
+};
+
+const reservationCanceledCustomer = async (reservationData) => {
+  try {
+    const response = await axiosInstance.post('/info/reservationCanceledCustomer', reservationData);
+    return response.data;
+  } catch (error) {
+    console.error('Kayıt Hata:', error.message);
+    throw error;
+  }
+}
+
+const reservationCanceled = async (reservationData) => {
+  try {
+    const response = await axiosInstance.post('/reservation/reservationCanceled', reservationData);
+    return response.data;
+  } catch (error) {
+    console.error('Kayıt Hata:', error.message);
+    throw error;
+  }
+}
+
+const reservationConfirm = async (reservationData) => {
+  try {
+    const response = await axiosInstance.post('/reservation/reservationConfirm', reservationData);
+    return response.data;
+  } catch (error) {
+    console.error('Kayıt Hata:', error.message);
+    throw error;
+  }
+}
+
+const askForConfirmation = async (reservationData) => {
+  try {
+    const response = await axiosInstance.post('/reservation/askForConfirmation', reservationData);
+    return response.data;
+  } catch (error) {
+    console.error('Kayıt Hata:', error.message);
+    throw error;
+  }
+}
+
+export { addReservation, getByRestaurantId, getById, getByInfoCode, reservationCanceledCustomer, reservationCanceled, reservationConfirm, askForConfirmation };
 
 
