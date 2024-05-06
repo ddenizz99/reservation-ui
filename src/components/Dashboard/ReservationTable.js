@@ -6,7 +6,7 @@ import { FaPhoneAlt, FaMoon, FaCheck, FaCalendarAlt, FaWindowClose } from "react
 import { MdWbSunny, MdClose } from "react-icons/md";
 import { Tooltip, OverlayTrigger } from 'react-bootstrap';
 
-const ReservationTable = ({data, isLoading, error, setModalItemId, setChangeReservationShow, setChangeReservationDateTimeShow, setChangeReservationAreaShow, setChangeReservationNumberOfPeopleShow}) => {
+const ReservationTable = ({data, isLoading, error, setModalItemId, setChangeReservationShow, setChangeReservationDateTimeShow, setChangeReservationAreaShow, setChangeReservationNumberOfPeopleShow, setChangeReservationInfoShow}) => {
 
     const themeR = useSelector((state) => state.theme.theme);
     const columns = [
@@ -38,13 +38,13 @@ const ReservationTable = ({data, isLoading, error, setModalItemId, setChangeRese
           name: 'Müşteri',
           selector: row => row.customer_name,
           sortable: true,
-          cell: row => <CustomCustomer row={row} />
+          cell: row => <div style={{cursor:'pointer'}} onClick={() => {setModalItemId(row.reservation_id); setChangeReservationInfoShow(true);}}><CustomCustomer row={row} /></div>
         },
         {
           name: 'Kayıt Zamanı',
           selector: row => row.created_at,
           sortable: true,
-          cell: row => <CustomAddedUser row={row} />,
+          cell: row => <div style={{cursor:'pointer'}} onClick={() => {setModalItemId(row.reservation_id); setChangeReservationInfoShow(true);}}><CustomAddedUser row={row} /></div>,
           id: 'createdAt'
         }
     ];   

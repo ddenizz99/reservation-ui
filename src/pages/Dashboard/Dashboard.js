@@ -9,7 +9,7 @@ const ChangeReservationArea = React.lazy(() => import('../../components/Dashboar
 const ChangeReservationStatus = React.lazy(() => import('../../components/Dashboard/ChangeReservationStatus'));
 const ChangeReservationDateTime = React.lazy(() => import('../../components/Dashboard/ChangeReservationDateTime'));
 const ChangeReservationNumberOfPeople = React.lazy(() => import('../../components/Dashboard/ChangeReservationNumberOfPeople'));
-
+const ChangeReservationInfo = React.lazy(() => import('../../components/Dashboard/ChangeReservationInfo'));
 
 function Dashboard() {
 
@@ -27,6 +27,7 @@ function Dashboard() {
   const [changeReservationDateTimeShow, setChangeReservationDateTimeShow] = useState(false);
   const [changeReservationAreaShow, setChangeReservationAreaShow] = useState(false);
   const [changeReservationNumberOfPeopleShow, setChangeReservationNumberOfPeopleShow] = useState(false);
+  const [changeReservationInfoShow, setChangeReservationInfoShow] = useState(false);
 
   useEffect(() => {
     // Tanımlanan async fonksiyonu çağırıyoruz.
@@ -185,6 +186,7 @@ function Dashboard() {
             setChangeReservationDateTimeShow={setChangeReservationDateTimeShow}
             setChangeReservationAreaShow={setChangeReservationAreaShow}
             setChangeReservationNumberOfPeopleShow={setChangeReservationNumberOfPeopleShow}
+            setChangeReservationInfoShow={setChangeReservationInfoShow}
           />
         </div>
       </div>
@@ -216,6 +218,11 @@ function Dashboard() {
         </Suspense>
       )}
       
+      {changeReservationInfoShow && (
+        <Suspense fallback={<div></div>}>
+          <ChangeReservationInfo modalItemId={modalItemId} setModalItemId={setModalItemId} title={'Rezervasyon Bilgilerini Düzenle'} show={changeReservationInfoShow} setShow={setChangeReservationInfoShow} refreshMainData={fetchData}></ChangeReservationInfo>
+        </Suspense>
+      )}
       
 
     </div>

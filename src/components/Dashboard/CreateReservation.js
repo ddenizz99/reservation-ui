@@ -17,6 +17,7 @@ import CountryCodeSelect from "./Form/CountryCodeSelect";
 import { addReservation } from "../../services/ReservationService";
 import { toast } from 'react-toastify';
 import { createReservationSchema } from '../../utils/validations/GlobalSchema'
+import PlatformSelect from "./Form/PlatformSelect";
 
 const CreateReservation = ({ show, handleClose }) => {
 
@@ -119,6 +120,9 @@ const CreateReservation = ({ show, handleClose }) => {
             reservation_note: '',
             location: '',
             number_of_people: '',
+            cake_order: 'no',
+            flower_order: 'no',
+            platform: ''
         },
         validationSchema: createReservationSchema(newCustomerName),
         onSubmit: async (values) => {
@@ -291,6 +295,67 @@ const CreateReservation = ({ show, handleClose }) => {
                                 <NumberOfPeople value={values.number_of_people} setFieldValue={setFieldValue} touched={touched.number_of_people} errors={errors.number_of_people}></NumberOfPeople>
                                 <LocationRadio className="mb-3 mt-3" value={values.location} handleChange={handleChange} touched={touched.location} errors={errors.location}></LocationRadio>
                                 <TagsSelection className="mb-3 mt-3" value={values.tags} setFieldValue={setFieldValue}></TagsSelection>
+                                <PlatformSelect value={values.platform} setFieldValue={setFieldValue} touched={touched.platform} errors={errors.platform} />
+                                <div className='row'>
+                                    <div className='col-md-6'>
+                                    <Form.Group className="mb-3 mt-3" controlId="formBasicCheck1">
+                                        <Form.Label className='fw-bold'>Pasta siparişi var mı?</Form.Label>
+                                        <br/>
+                                        <Form.Check
+                                            inline
+                                            type="radio"
+                                            id="default-radio-no"
+                                            label="Hayır"
+                                            name="cake_order"
+                                            value="no"
+                                            onChange={handleChange}
+                                            checked={values.cake_order === 'no'}
+                                        />
+                                        <Form.Check
+                                            inline
+                                            type="radio"
+                                            id="default-radio-yes"
+                                            label="Evet"
+                                            name="cake_order"
+                                            value="yes"
+                                            onChange={handleChange}
+                                            checked={values.cake_order === 'yes'}
+                                        />
+                                        {touched.cake_order && errors.cake_order ? (
+                                            <div className="validation-error-span">{errors.cake_order}</div>
+                                        ) : null}
+                                    </Form.Group>
+                                    </div>
+                                    <div className='col-md-6'>
+                                    <Form.Group className="mb-3 mt-3" controlId="formBasicCheck2">
+                                        <Form.Label className='fw-bold'>Çiçek siparişi var mı?</Form.Label>
+                                        <br/>
+                                        <Form.Check
+                                            inline
+                                            type="radio"
+                                            id="default-radio-no-1"
+                                            label="Hayır"
+                                            name="flower_order"
+                                            value="no"
+                                            onChange={handleChange}
+                                            checked={values.flower_order === 'no'}
+                                        />
+                                        <Form.Check
+                                            inline
+                                            type="radio"
+                                            id="default-radio-yes-1"
+                                            label="Evet"
+                                            name="flower_order"
+                                            value="yes"
+                                            onChange={handleChange}
+                                            checked={values.flower_order === 'yes'}
+                                        />
+                                        {touched.flower_order && errors.flower_order ? (
+                                            <div className="validation-error-span">{errors.flower_order}</div>
+                                        ) : null}
+                                    </Form.Group>
+                                    </div>
+                                </div>
                                 <Form.Group className="mb-3 mt-3" controlId="formBasicTagsNotes">
                                     <Form.Label>Not</Form.Label>
                                     <Form.Control 

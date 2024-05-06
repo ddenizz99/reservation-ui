@@ -7,6 +7,7 @@ import Login from "./pages/Auth/Login";
 import Page404 from "./pages/Dashboard/Page404";
 import InfoLayout from "./layout/Info";
 import ReservationInfo from "./pages/Info/ReservationInfo";
+import CustomersPage from "./pages/Dashboard/CustomersPage";
 
 const routes = [
     {
@@ -16,6 +17,10 @@ const routes = [
             {
                 index: true,
                 element: <Dashboard />
+            },
+            {
+                path: 'customers',
+                element: <CustomersPage/>
             },
             {
                 path: 'blank-page',

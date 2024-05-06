@@ -47,7 +47,7 @@ const defaultOptions = [
 export default function TagsSelection({value, setFieldValue}) {
 
     const [options, setOptions] = useState(defaultOptions);
-    const [selectedOptions, setSelectedOptions] = useState(value);
+    const [selectedOptions, setSelectedOptions] = useState([]);
 
     // Yeni bir öğe eklendiğinde hem options hem de seçilenler listesi güncellenir
     const handleCreate = (inputValue) => {
@@ -57,8 +57,12 @@ export default function TagsSelection({value, setFieldValue}) {
     };
 
     useEffect(() => {
-        setFieldValue('tags', selectedOptions, false);
-    }, [selectedOptions]);
+        if (selectedOptions.length === 0) {
+            setSelectedOptions(value);
+        }else{
+            setFieldValue('tags', selectedOptions, false);
+        }
+    }, [selectedOptions, value, setFieldValue]);
 
     return (
         <CreatableSelect

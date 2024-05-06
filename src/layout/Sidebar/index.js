@@ -15,26 +15,26 @@ function SidebarLayout() {
       title: 'Misafirler',
       icon: 'bx bxs-user-rectangle',
       iconColor: 'parent-icon icon-color-3',
-      url: '/blank-page'
+      url: '/customers'
     },
     {
       title: 'Değerlendirmeler',
       icon: 'bx lni-comments-alt',
       iconColor: 'parent-icon icon-color-5',
-      url: '#'
+      url: '/reviews'
     },
     {
       title: 'Hediyeler',
       icon: 'bx bx-gift',
       iconColor: 'parent-icon icon-color-7',
-      url: '#'
+      url: '/gifts'
     },
     {
       title: 'Pazarlama',
       icon: 'bx bx-star',
       iconColor: 'parent-icon icon-color-8',
       subItems: [
-        { title: 'Kampanyalar', url: '#' }
+        { title: 'Kampanyalar', url: '/campaigns' }
       ]
     },
     {

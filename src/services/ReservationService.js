@@ -124,6 +124,16 @@ const changeNumberOfPeople = async (reservationData) => {
   }
 }
 
+const changeReservationInfoApi = async (reservationData) => {
+  try {
+    const response = await axiosInstance.post('/reservation/changeReservationInfo', reservationData);
+    return response.data;
+  } catch (error) {
+    console.error('Kayıt Hata:', error.message);
+    throw error;
+  }
+}
+
 const getByRestaurantIdAreaAndTable = async () => {
   try {
     const response = await axiosInstance.get('/reservation/getByRestaurantIdAreaAndTable');
@@ -147,7 +157,8 @@ export {
   changeDateTime,
   getByRestaurantIdAreaAndTable,
   changeAreaAndTable,
-  changeNumberOfPeople
+  changeNumberOfPeople,
+  changeReservationInfoApi
 };
 
 

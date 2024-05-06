@@ -27,11 +27,22 @@ export const createReservationSchema = (newCustomer) => {
       location: Yup.number().integer().required(),
       reservation_note: Yup.string().min(2).max(255),
       date: Yup.string().required(),
-      time: Yup.string().required()
+      time: Yup.string().required(),
+      cake_order: Yup.string().max(3),
+      flower_order: Yup.string().max(3),
+      platform: Yup.string().max(255)
     });
   };
 
   export const changeReservationDataTimeSchema = Yup.object().shape({
     date: Yup.string().required(),
     time: Yup.string().required()
+  });
+
+  export const changeReservationInfoSchema = Yup.object().shape({
+    reservation_id: Yup.number().required(),
+    notes: Yup.string(),
+    cake_order: Yup.string().max(3),
+    flower_order: Yup.string().max(3),
+    platform: Yup.string().max(255),
   });
