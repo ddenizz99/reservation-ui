@@ -1,11 +1,10 @@
-import React from "react";
-import { useEffect, useState, useRef } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useFormik } from "formik";
 import { Modal, Button, Alert, Form } from 'react-bootstrap';
 import FormWizard from "react-form-wizard-component";
 import { BsInfoCircleFill } from "react-icons/bs";
 import "react-form-wizard-component/dist/style.css";
 import ReactSelect from "./Form/ReactSelect";
-import { useFormik, ErrorMessage  } from "formik";
 import SelectDate from "./Form/SelectDate";
 import TimePicker from "./Form/TimePicker";
 import TagsSelection from "./Form/TagsSelection";
@@ -16,90 +15,18 @@ import LanguageSelect from "./Form/LanguageSelect";
 import CountryCodeSelect from "./Form/CountryCodeSelect";
 import { addReservation } from "../../services/ReservationService";
 import { toast } from 'react-toastify';
-import { createReservationSchema } from '../../utils/validations/GlobalSchema'
+import { createReservationSchema } from '../../utils/validations/GlobalSchema';
 
 const CreateReservation = ({ show, handleClose }) => {
 
-    //const formWizardRef = React.createRef();
     const formWizardRef = useRef(null);
-
     const [finishButton, setFinishButton] = useState(false);
     const [isOpenCustomerCreation, setIsOpenCustomerCreation] = useState(false);
     const [newCustomerName, setNewCustomerName] = useState('');
     const [customerOptions, setCustomerOptions] = useState([]);
-
     const [error, setError] = useState('');
     const [alertType, setAlertType] = useState('danger');
     const [isLoading, setIsLoading] = useState(false);
-
-    useEffect(() => {
-        // newCustomerName props'unda bir değişiklik olduğunda, formik state'ini güncelle
-        setValues(values => ({
-            ...values,
-            full_name: newCustomerName || ''
-        }));
-    }, [newCustomerName]);
-
-    const handleComplete = () => {
-        //alert("Form completed!");
-        handleSubmit();
-        
-        // Handle form completion logic here
-    };
-    
-    const tabChanged = ({ prevIndex, nextIndex }) => {
-        if (nextIndex === 3) {
-            setFinishButton(true);
-        }else{
-            setFinishButton(false);
-        }
-    };
-
-    const handelNext = () => {
-        formWizardRef.current?.nextTab();
-    };
-    const handelPrev = () => {
-        formWizardRef.current?.prevTab();
-    };
-    const handelReset = () => {
-        formWizardRef.current?.reset();
-        CreateReservationDestroy();
-    };
-    /* const handelActiveAll = () => {
-        console.log("activeAll");
-        formWizardRef.current?.activeAll();
-    };
-    const handelChangeTab = () => {
-        console.log("changeTab");
-        formWizardRef.current?.goToTab(2);
-    }; */
-
-    const CreateReservationDestroy = () => {
-        setIsOpenCustomerCreation(false);
-        setNewCustomerName('');
-        resetForm();
-    };
-
-    function formatDateToDatabaseFormat(date, time = 'day') {
-        date = new Date(date);
-        if (time === 'full') {
-            const year = date.getFullYear();
-            const month = String(date.getMonth() + 1).padStart(2, '0');
-            const day = String(date.getDate()).padStart(2, '0');
-            const hour = String(date.getHours()).padStart(2, '0');
-            const minute = String(date.getMinutes()).padStart(2, '0');
-            const second = String(date.getSeconds()).padStart(2, '0');
-        
-            return `${year}-${month}-${day} ${hour}:${minute}:${second}`;
-        }else{
-            const year = date.getFullYear();
-            const month = String(date.getMonth() + 1).padStart(2, '0');
-            const day = String(date.getDate()).padStart(2, '0');
-
-            return `${year}-${month}-${day}`;
-        }
-    
-    }
 
     /*FORM*/
     const { handleSubmit, handleChange, values, touched, errors, dirty, isSubmitting, resetForm, setValues, setFieldValue } = useFormik({
@@ -147,6 +74,60 @@ const CreateReservation = ({ show, handleClose }) => {
                 
         }
     })
+
+    useEffect(() => {
+        setFieldValue("full_name", newCustomerName || "");
+    }, [newCustomerName, setFieldValue]);
+
+    const handleComplete = () => {
+        handleSubmit();
+    };
+
+    const tabChanged = ({ nextIndex }) => {
+        setFinishButton(nextIndex === 3);
+    };
+
+    const handleNext = () => {
+        formWizardRef.current?.nextTab();
+    };
+
+    const handlePrev = () => {
+        formWizardRef.current?.prevTab();
+    };
+
+    const handleReset = () => {
+        formWizardRef.current?.reset();
+        resetForm();
+        setIsOpenCustomerCreation(false);
+        setNewCustomerName("");
+    };
+
+    const CreateReservationDestroy = () => {
+        setIsOpenCustomerCreation(false);
+        setNewCustomerName('');
+        resetForm();
+    };
+
+    function formatDateToDatabaseFormat(date, time = 'day') {
+        date = new Date(date);
+        if (time === 'full') {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            const hour = String(date.getHours()).padStart(2, '0');
+            const minute = String(date.getMinutes()).padStart(2, '0');
+            const second = String(date.getSeconds()).padStart(2, '0');
+        
+            return `${year}-${month}-${day} ${hour}:${minute}:${second}`;
+        }else{
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+
+            return `${year}-${month}-${day}`;
+        }
+    
+    }
 
     return (
         <div>
@@ -350,11 +331,11 @@ const CreateReservation = ({ show, handleClose }) => {
                 <Modal.Footer>
                 <Button variant="secondary" onClick={() => {CreateReservationDestroy(); handleClose();}}>Kapat</Button>
 
-                <Button variant="warning" onClick={handelReset}>Reset</Button>
-                <Button variant="primary" onClick={handelPrev}>Geri</Button>
+                <Button variant="warning" onClick={handleReset}>Reset</Button>
+                <Button variant="primary" onClick={handlePrev}>Geri</Button>
                 
                 {!finishButton ?
-                 (<Button variant="primary" onClick={handelNext}>İleri</Button>) : 
+                 (<Button variant="primary" onClick={handleNext}>İleri</Button>) : 
                  (<Button variant="success" onClick={handleComplete}>Rezervasyonu Tamamla</Button>)
                 }
 

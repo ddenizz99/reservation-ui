@@ -35,6 +35,7 @@ const LocationRadio = ({value, handleChange, touched, errors}) => {
             <div className="mb-3">
               {locationData.map((v, k) => (
                     <Form.Check
+                      key={k}
                       inline
                       label={v.name}
                       name="location"

@@ -84,6 +84,70 @@ const askForConfirmation = async (reservationData) => {
   }
 }
 
-export { addReservation, getByRestaurantId, getById, getByInfoCode, reservationCanceledCustomer, reservationCanceled, reservationConfirm, askForConfirmation };
+const bookAgain = async (reservationData) => {
+  try {
+    const response = await axiosInstance.post('/reservation/bookAgain', reservationData);
+    return response.data;
+  } catch (error) {
+    console.error('Kayıt Hata:', error.message);
+    throw error;
+  }
+}
+
+const changeDateTime = async (reservationData) => {
+  try {
+    const response = await axiosInstance.post('/reservation/changeDateTime', reservationData);
+    return response.data;
+  } catch (error) {
+    console.error('Kayıt Hata:', error.message);
+    throw error;
+  }
+}
+
+const changeAreaAndTable = async (reservationData) => {
+  try {
+    const response = await axiosInstance.post('/reservation/changeAreaAndTable', reservationData);
+    return response.data;
+  } catch (error) {
+    console.error('Kayıt Hata:', error.message);
+    throw error;
+  }
+}
+
+const changeNumberOfPeople = async (reservationData) => {
+  try {
+    const response = await axiosInstance.post('/reservation/changeNumberOfPeople', reservationData);
+    return response.data;
+  } catch (error) {
+    console.error('Kayıt Hata:', error.message);
+    throw error;
+  }
+}
+
+const getByRestaurantIdAreaAndTable = async () => {
+  try {
+    const response = await axiosInstance.get('/reservation/getByRestaurantIdAreaAndTable');
+    return response.data;
+  } catch (error) {
+    console.error('API Hata:', error.message);
+    throw error;
+  }
+};
+
+export { 
+  addReservation, 
+  getByRestaurantId, 
+  getById, 
+  getByInfoCode, 
+  reservationCanceledCustomer, 
+  reservationCanceled, 
+  reservationConfirm, 
+  askForConfirmation,
+  bookAgain,
+  changeDateTime,
+  getByRestaurantIdAreaAndTable,
+  changeAreaAndTable,
+  changeNumberOfPeople
+};
 
 

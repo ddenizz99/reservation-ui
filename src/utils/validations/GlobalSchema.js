@@ -30,3 +30,8 @@ export const createReservationSchema = (newCustomer) => {
       time: Yup.string().required()
     });
   };
+
+  export const changeReservationDataTimeSchema = Yup.object().shape({
+    date: Yup.string().required(),
+    time: Yup.string().required()
+  });

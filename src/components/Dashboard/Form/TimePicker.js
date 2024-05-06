@@ -19,10 +19,20 @@ const TimePicker = ({value, setFieldValue}) => {
 
   const style = {margin:10, padding:15};
 
+  const defaultActiveKey = () => {
+    if (noonTimes.includes(value)) {
+      return 'noon';
+    }
+    if (eveningTimes.includes(value)) {
+      return 'evening';
+    }
+    return 'noon';
+  }
+
   return (
 
     <Tabs
-      defaultActiveKey="noon"
+      defaultActiveKey={defaultActiveKey}
       id="uncontrolled-tab-example"
       className="mb-3"
     >

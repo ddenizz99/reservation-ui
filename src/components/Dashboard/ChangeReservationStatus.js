@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { Modal, Button, Spinner, Alert } from 'react-bootstrap';
 import { MdDateRange, MdCheckCircleOutline, MdAccessTime, MdPayment, MdBlock } from "react-icons/md";
-import { getById, reservationCanceled, reservationConfirm, askForConfirmation } from '../../services/ReservationService';
+import { getById, reservationCanceled, reservationConfirm, askForConfirmation, bookAgain } from '../../services/ReservationService';
 import Swal from 'sweetalert2';
 
-const ChangeReservationStatus = ({ modalItemId, setModalItemId, title, show, setShow }) => {
+const ChangeReservationStatus = ({ modalItemId, setModalItemId, title, show, setShow, refreshMainData }) => {
 
     const [reservationData, setReservationData] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -36,7 +36,7 @@ const ChangeReservationStatus = ({ modalItemId, setModalItemId, title, show, set
     // Modalı kapama fonksiyonu
     const handleClose = () => {
         setShow(false);
-        setModalItemId('');
+        //setModalItemId('');
     }
 
     const dateTr = (date) => {
@@ -70,6 +70,8 @@ const ChangeReservationStatus = ({ modalItemId, setModalItemId, title, show, set
                             confirmButtonText: "Tamam"
                         });
                         setRefreshData(Math.floor(Math.random() * 10));
+                        //main data
+                        refreshMainData();
                     }else{
                         Swal.fire({
                             title: "Başarısız!",
@@ -97,6 +99,62 @@ const ChangeReservationStatus = ({ modalItemId, setModalItemId, title, show, set
                     confirmButtonText: "Tamam"
                 });
                 setRefreshData(Math.floor(Math.random() * 10));
+                //main data
+                refreshMainData();
+            }else{
+                Swal.fire({
+                    title: "Başarısız!",
+                    text: result.message,
+                    icon: "error",
+                    confirmButtonText: "Tamam"
+                });
+            }
+        }).catch(result => {
+            setIsLoading(false);
+            setError(String(result));
+        });
+    }
+
+    const handleAskForConfirmation = async () => {
+        await askForConfirmation({"reservation_id":reservationData.reservation_id})
+        .then(result => {
+            if(result.success){
+                Swal.fire({
+                    title: "İstek Gönderildi!",
+                    text: result.message,
+                    icon: "success",
+                    confirmButtonText: "Tamam"
+                });
+                setRefreshData(Math.floor(Math.random() * 10));
+                //main data
+                refreshMainData();
+            }else{
+                Swal.fire({
+                    title: "Başarısız!",
+                    text: result.message,
+                    icon: "error",
+                    confirmButtonText: "Tamam"
+                });
+            }
+        }).catch(result => {
+            setIsLoading(false);
+            setError(String(result));
+        });
+    }
+
+    const handleBookAgain = async () => {
+        await bookAgain({"reservation_id":reservationData.reservation_id})
+        .then(result => {
+            if(result.success){
+                Swal.fire({
+                    title: "Tekrar Rezerve Edildi!",
+                    text: result.message,
+                    icon: "success",
+                    confirmButtonText: "Tamam"
+                });
+                setRefreshData(Math.floor(Math.random() * 10));
+                //main data
+                refreshMainData();
             }else{
                 Swal.fire({
                     title: "Başarısız!",
@@ -134,10 +192,20 @@ const ChangeReservationStatus = ({ modalItemId, setModalItemId, title, show, set
                     return (<Alert key={'danger'} variant={'danger'}>
                                 <b>{dateTr(date)}</b> tarihinde <b>{user_name}</b> tarafından iptal edildi.
                             </Alert>);
+
+                case '6':
+                    return (<Alert key={'secondary'} variant={'secondary'}>
+                                <b>{dateTr(date)}</b> tarihinde <b>{user_name}</b> tarafından tekrar rezerve edildi.
+                            </Alert>);
                     
                 case '2':
                     return (<Alert key={'success'} variant={'success'}>
                                 <b>{dateTr(date)}</b> tarihinde <b>{user_name}</b> tarafından konfirme edildi.
+                            </Alert>);
+
+                case '3':
+                    return (<Alert key={'info'} variant={'info'}>
+                                <b>Onay bekliyor.</b>
                             </Alert>);
 
                 case '7':
@@ -157,7 +225,7 @@ const ChangeReservationStatus = ({ modalItemId, setModalItemId, title, show, set
     const eventHelper = () => {
         switch (reservationData.status) {
             case '5':
-                return (<><button type="button" className="btn btn-outline-warning btn-block m-2 p-2 border-0" style={buttonStyle}>
+                return (<><button type="button" onClick={handleBookAgain} className="btn btn-outline-warning btn-block m-2 p-2 border-0" style={buttonStyle}>
                             <MdDateRange style={{fontSize:30}}/>
                             <span className='mt-2'>Rezervasyon</span>
                         </button></>);
@@ -173,7 +241,7 @@ const ChangeReservationStatus = ({ modalItemId, setModalItemId, title, show, set
                             <MdCheckCircleOutline style={{fontSize:30}}/>
                             <span className='mt-2'>Konfirme Et</span>
                         </button>
-                        <button type="button" className="btn btn-outline-primary btn-block m-2 p-2 border-0" style={buttonStyle}>
+                        <button type="button" onClick={handleAskForConfirmation} className="btn btn-outline-primary btn-block m-2 p-2 border-0" style={buttonStyle}>
                             <MdAccessTime style={{fontSize:30}}/>
                             <span className='mt-2'>Konfirme İste</span>
                         </button>
@@ -193,7 +261,7 @@ const ChangeReservationStatus = ({ modalItemId, setModalItemId, title, show, set
                             <MdCheckCircleOutline style={{fontSize:30}}/>
                             <span className='mt-2'>Konfirme Et</span>
                         </button>
-                        <button type="button" className="btn btn-outline-primary btn-block m-2 p-2 border-0" style={buttonStyle}>
+                        <button type="button" onClick={handleAskForConfirmation} className="btn btn-outline-primary btn-block m-2 p-2 border-0" style={buttonStyle}>
                             <MdAccessTime style={{fontSize:30}}/>
                             <span className='mt-2'>Konfirme İste</span>
                         </button>
