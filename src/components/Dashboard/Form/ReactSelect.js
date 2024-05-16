@@ -66,8 +66,8 @@ export default function ReactSelect({ setIsOpenCustomerCreation, setNewCustomerN
           //defaultOptions
           onCreateOption={handleCreate}
           loadOptions={promiseOptions}
-          placeholder={error ?? "Yeni misafir ekleyebilir veya mevcut misafirlerden seçebilirsiniz."}
-          isDisabled={error}
+          placeholder={error ? ((error !== "Error: Kayıtlı müşteri bulunmuyor.") ? error : "Yeni misafir ekleyebilir veya mevcut misafirlerden seçebilirsiniz.") : "Yeni misafir ekleyebilir veya mevcut misafirlerden seçebilirsiniz."}
+          isDisabled={error ? ((error !== "Error: Kayıtlı müşteri bulunmuyor.") ? true : false) : false}
           closeMenuOnScroll
           value={options.find(option => option.value === value)}
           onChange={option => setFieldValue('customer_id', option.value)}

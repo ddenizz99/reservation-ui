@@ -30,7 +30,10 @@ export const createReservationSchema = (newCustomer) => {
       time: Yup.string().required(),
       cake_order: Yup.string().max(3),
       flower_order: Yup.string().max(3),
-      platform: Yup.string().max(255)
+      platform: Yup.string().max(255),
+      assistant_full_name: Yup.string().min(2).max(255),
+      assistant_phone: Yup.number().typeError('Lütfen geçerli bir telefon numarası giriniz'),
+      assistant_email: Yup.string().min(2).max(255).email()
     });
   };
 

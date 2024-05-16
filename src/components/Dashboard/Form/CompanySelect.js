@@ -1,21 +1,21 @@
 import { Form, Spinner } from 'react-bootstrap';
-import { getAll } from "../../../services/CountryCodeService";
+import { getByRestaurantId } from "../../../services/CompanyService";
 import { useState, useEffect  } from 'react';
 
-const CountryCodeSelect = ({value, handleChange}) => {
+const CompanySelect = ({value, handleChange}) => {
 
-    const [countryCodeData, setCountryCodeData] = useState([]);
+    const [companyData, setCompanyData] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        const fetchCountryCodeData = async () => {
+        const fetchCompanyData = async () => {
             setIsLoading(true);
             setError(null); 
-            await getAll()
+            await getByRestaurantId()
             .then(result => {
                 if(result.success){
-                    setCountryCodeData(result.data);
+                    setCompanyData(result.data);
                     setIsLoading(false);
                 }else{
                     setIsLoading(false);
@@ -27,23 +27,23 @@ const CountryCodeSelect = ({value, handleChange}) => {
             });
         };
 
-        fetchCountryCodeData();
+        fetchCompanyData();
     }, []);
 
     return (
-        <Form.Group className="mb-3" controlId="formBasicTelephoneCodes">
-            <Form.Label>Telefon Kodu <strong style={{color: '#dd4814'}}>*</strong></Form.Label>
+        <Form.Group className="mb-3" controlId="formCompanies">
+            <Form.Label>Şirket</Form.Label>
             <Form.Select 
                 aria-label="Default select example" 
-                name="telephone_code" 
+                name="company_id" 
                 value={value} 
                 onChange={handleChange} 
                 disabled={isLoading || error}
                 isInvalid={!!error}
             >
-                {/* <option value="">Seviye seçiniz...</option> */}
-                {countryCodeData.map((value) => (
-                    <option key={value.id} value={value.id}>{value.name}</option>
+                <option value="">Şirket seçiniz...</option> 
+                {companyData.map((value, index) => (
+                    <option key={index} value={value.id}>{value.company_name}</option>
                 ))}
             </Form.Select>
             {isLoading && <Spinner animation="border" />}
@@ -54,4 +54,4 @@ const CountryCodeSelect = ({value, handleChange}) => {
       );
 };
 
-export default CountryCodeSelect;
+export default CompanySelect;

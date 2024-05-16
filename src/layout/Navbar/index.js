@@ -315,7 +315,7 @@ function NavbarLayout() {
                       <p className="user-name mb-0">{userData.full_name}</p>
                       <p className="designattion mb-0">{userData.restaurant_name}</p>
                     </div>
-                    <img src="egedeniz.jpg" className="user-img" alt="user avatar" />
+                    <img src="tda.jpg" className="user-img" alt="user avatar" />
                   </div>
                 </a>
                 <div className="dropdown-menu dropdown-menu-end">	

@@ -54,6 +54,16 @@ const reservationCanceledCustomer = async (reservationData) => {
   }
 }
 
+const reservationConfirmCustomer = async (reservationData) => {
+  try {
+    const response = await axiosInstance.post('/info/reservationConfirmCustomer', reservationData);
+    return response.data;
+  } catch (error) {
+    console.error('Kayıt Hata:', error.message);
+    throw error;
+  }
+}
+
 const reservationCanceled = async (reservationData) => {
   try {
     const response = await axiosInstance.post('/reservation/reservationCanceled', reservationData);
@@ -158,7 +168,8 @@ export {
   getByRestaurantIdAreaAndTable,
   changeAreaAndTable,
   changeNumberOfPeople,
-  changeReservationInfoApi
+  changeReservationInfoApi,
+  reservationConfirmCustomer
 };
 
 

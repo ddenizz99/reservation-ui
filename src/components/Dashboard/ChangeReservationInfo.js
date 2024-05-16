@@ -19,7 +19,9 @@ const ChangeReservationInfo = ({ modalItemId, setModalItemId, title, show, setSh
         notes: '',
         cake_order: 'no',
         flower_order: 'no',
-        platform: ''
+        platform: '',
+        sms_permission: true,
+        email_permission: true
     });
 
     useEffect(() => {
@@ -37,7 +39,9 @@ const ChangeReservationInfo = ({ modalItemId, setModalItemId, title, show, setSh
                         notes: result.data.reservation_note,
                         cake_order: result.data.cake_order,
                         flower_order: result.data.flower_order,
-                        platform: result.data.platform
+                        platform: result.data.platform,
+                        sms_permission: result.data.reservation_sms_permission == 1 ? true : false,
+                        email_permission: result.data.reservation_email_permission == 1 ? true : false
                     });
                 }else{
                     setIsLoading(false);
@@ -224,6 +228,30 @@ const ChangeReservationInfo = ({ modalItemId, setModalItemId, title, show, setSh
                                         <div className="validation-error-span">{errors.flower_order}</div>
                                     ) : null}
                                 </Form.Group>
+                                </div>
+                                <div className="col-md-6">
+                                    <Form.Group>
+                                        <Form.Check
+                                            type="checkbox"
+                                            id="smsPermission"
+                                            label="SMS Gönderilsin"
+                                            checked={values.sms_permission}
+                                            name="sms_permission"
+                                            onChange={handleChange}
+                                        />
+                                    </Form.Group>
+                                </div>
+                                <div className="col-md-6">
+                                    <Form.Group>
+                                        <Form.Check
+                                            type="checkbox"
+                                            id="emailPermission"
+                                            label="E-posta Gönderilsin"
+                                            checked={values.email_permission}
+                                            name="email_permission"
+                                            onChange={handleChange}
+                                        />
+                                    </Form.Group>
                                 </div>
                             </div>
                         </div>

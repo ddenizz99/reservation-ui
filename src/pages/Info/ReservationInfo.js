@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { Modal, Button, Spinner, Alert } from 'react-bootstrap';
 import { FaPhoneAlt, FaMoon, FaCheck, FaCalendarAlt, FaTimes } from "react-icons/fa";
-import { getByInfoCode, reservationCanceledCustomer } from '../../services/ReservationService';
+import { getByInfoCode, reservationCanceledCustomer, reservationConfirmCustomer } from '../../services/ReservationService';
 import Swal from 'sweetalert2';
 
 function ReservationInfo() {
@@ -60,6 +60,7 @@ function ReservationInfo() {
         confirmButtonText: "Evet, İptal Et"
       }).then(async (result) => {
         if (result.isConfirmed) {
+            setIsLoading(true);
             await reservationCanceledCustomer({"code":code})
             .then(result => {
                 if(result.success){
@@ -84,6 +85,32 @@ function ReservationInfo() {
             });
         }
       });
+  }
+
+  const reservationConfirm = async () => {
+    setIsLoading(true);
+    await reservationConfirmCustomer({"code":code})
+    .then(result => {
+        if(result.success){
+            Swal.fire({
+                title: "Konfirme Edildi!",
+                text: result.message,
+                icon: "success",
+                confirmButtonText: "Tamam"
+            });
+            setRefreshData(Math.floor(Math.random() * 10));
+        }else{
+            Swal.fire({
+                title: "Başarısız!",
+                text: result.message,
+                icon: "error",
+                confirmButtonText: "Tamam"
+            });
+        }
+    }).catch(result => {
+        setIsLoading(false);
+        setError(String(result));
+    });
   }
 
   return (
@@ -138,7 +165,9 @@ function ReservationInfo() {
                                         </div>
                                     </div>
                                 </div>
-                                <button type="button" className="btn btn-danger mt-3" onClick={reservationCanceled}>Rezervasyonu İptal Et</button><hr /></>) : ('')}
+                                <button type="button" className="btn btn-danger m-3" onClick={reservationCanceled}>Rezervasyonu İptal Et</button>
+                                {reservationData.status == 3 ? <button type="button" className="btn btn-success m-3" onClick={reservationConfirm}>Rezervasyonu Konfirme Et</button> : ''}
+                                <hr /></>) : ('')}
                                 
                                 <h5>Adres</h5>
                                 <p>{reservationData.restaurant_address  ?? '-'}</p>

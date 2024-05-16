@@ -60,6 +60,7 @@ const ChangeReservationStatus = ({ modalItemId, setModalItemId, title, show, set
             confirmButtonText: "Evet, İptal Et"
           }).then(async (result) => {
             if (result.isConfirmed) {
+                setIsLoading(true);
                 await reservationCanceled({"reservation_id":reservationData.reservation_id})
                 .then(result => {
                     if(result.success){
@@ -89,6 +90,7 @@ const ChangeReservationStatus = ({ modalItemId, setModalItemId, title, show, set
     }
 
     const reservationConfirmed = async () => {
+        setIsLoading(true);
         await reservationConfirm({"reservation_id":reservationData.reservation_id})
         .then(result => {
             if(result.success){
@@ -116,6 +118,7 @@ const ChangeReservationStatus = ({ modalItemId, setModalItemId, title, show, set
     }
 
     const handleAskForConfirmation = async () => {
+        setIsLoading(true);
         await askForConfirmation({"reservation_id":reservationData.reservation_id})
         .then(result => {
             if(result.success){
@@ -143,6 +146,7 @@ const ChangeReservationStatus = ({ modalItemId, setModalItemId, title, show, set
     }
 
     const handleBookAgain = async () => {
+        setIsLoading(true);
         await bookAgain({"reservation_id":reservationData.reservation_id})
         .then(result => {
             if(result.success){

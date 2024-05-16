@@ -1,6 +1,6 @@
 import React from "react";
 import { useEffect, useState, useRef } from "react";
-import { Modal, Button, Alert, Form } from 'react-bootstrap';
+import { Modal, Button, Alert, Form, Tabs, Tab } from 'react-bootstrap';
 import FormWizard from "react-form-wizard-component";
 import { BsInfoCircleFill } from "react-icons/bs";
 import "react-form-wizard-component/dist/style.css";
@@ -18,6 +18,7 @@ import { addReservation } from "../../services/ReservationService";
 import { toast } from 'react-toastify';
 import { createReservationSchema } from '../../utils/validations/GlobalSchema'
 import PlatformSelect from "./Form/PlatformSelect";
+import CompanySelect from "./Form/CompanySelect";
 
 const CreateReservation = ({ show, handleClose }) => {
 
@@ -122,7 +123,15 @@ const CreateReservation = ({ show, handleClose }) => {
             number_of_people: '',
             cake_order: 'no',
             flower_order: 'no',
-            platform: ''
+            platform: '',
+            reservation_sms_permission: true,
+            reservation_email_permission: true,
+            company_id: '',
+            assistant_full_name: '',
+            assistant_phone: '',
+            assistant_email: '',
+            customer_sms_permission: true,
+            customer_email_permission: true
         },
         validationSchema: createReservationSchema(newCustomerName),
         onSubmit: async (values) => {
@@ -133,7 +142,6 @@ const CreateReservation = ({ show, handleClose }) => {
             await addReservation(values)
                 .then(result => {
                     if(result.success){
-                        //setLevelData(result.data);
                         setIsLoading(false);
                         toast.success(result.message);
                         CreateReservationDestroy();
@@ -279,6 +287,86 @@ const CreateReservation = ({ show, handleClose }) => {
                                                         </Form.Group>
                                                     </div>
 
+                                                    <div className="col-12 mt-3">
+                                                        <Tabs
+                                                            defaultActiveKey="company"
+                                                            id="uncontrolled-tab-user-info"
+                                                            className="mb-3"
+                                                        >
+                                                            <Tab eventKey="company" title="Şirket">
+                                                                <CompanySelect value={values.company_id} handleChange={handleChange} />
+                                                            </Tab>
+
+                                                            <Tab eventKey="assistant" title="Asistan">
+                                                                <p>Bu bölümden misafirin asistanına ait iletişim bilgilerini girebilirsiniz. Sonrasınra tüm iletişim asistana ait cep telefonu ve e-posta adresi üzerinden devam ettirilir.</p>
+                                                                <div className="row">
+                                                                    <div className="col-md-6">
+                                                                        <Form.Group className="mb-3" controlId="formBasicAssistantFullName">
+                                                                            <Form.Label>Ad Soyad</Form.Label>
+                                                                            <Form.Control type="text" name="assistant_full_name" placeholder="Asistan adı" value={values.assistant_full_name} onChange={handleChange} />
+                                                                            {touched.assistant_full_name && errors.assistant_full_name ? (
+                                                                                <Form.Text className="text-muted text-danger">
+                                                                                    {errors.assistant_full_name}
+                                                                                </Form.Text>
+                                                                            ) : null}
+                                                                        </Form.Group>
+                                                                    </div>
+                                                                    <div className="col-md-6">
+                                                                        <Form.Group className="mb-3" controlId="formBasicAssistantTelephone">
+                                                                            <Form.Label>Telefon</Form.Label>
+                                                                            <Form.Control type="text" name="assistant_phone" placeholder="5xxxxxxx" value={values.assistant_phone} onChange={handleChange} />
+                                                                            {touched.assistant_phone && errors.assistant_phone ? (
+                                                                                <Form.Text className="text-muted text-danger">
+                                                                                    {errors.assistant_phone}
+                                                                                </Form.Text>
+                                                                            ) : null}
+                                                                        </Form.Group>
+                                                                    </div>
+                                                                    <div className="col-md-6">
+                                                                        <Form.Group className="mb-3" controlId="formBasicAssistantEmail">
+                                                                            <Form.Label>E-posta</Form.Label>
+                                                                            <Form.Control type="email" name="assistant_email" placeholder="Asistan E-posta adresi" value={values.assistant_email} onChange={handleChange} />
+                                                                            {touched.assistant_email && errors.assistant_email ? (
+                                                                                <Form.Text className="text-muted text-danger">
+                                                                                    {errors.assistant_email}
+                                                                                </Form.Text>
+                                                                            ) : null}
+                                                                        </Form.Group>
+                                                                    </div>
+                                                                </div>
+                                                            </Tab>
+
+                                                            <Tab eventKey="settings" title="Ayarlar">
+                                                                <div className="row">
+                                                                    <div className="col-md-6">
+                                                                        <Form.Group>
+                                                                            <Form.Check
+                                                                                type="checkbox"
+                                                                                id="customerSmsPermission"
+                                                                                label="SMS Gönderilsin"
+                                                                                checked={values.customer_sms_permission}
+                                                                                name="customer_sms_permission"
+                                                                                onChange={handleChange}
+                                                                            />
+                                                                        </Form.Group>
+                                                                    </div>
+                                                                    <div className="col-md-6">
+                                                                        <Form.Group>
+                                                                            <Form.Check
+                                                                                type="checkbox"
+                                                                                id="customerEmailPermission"
+                                                                                label="E-posta Gönderilsin"
+                                                                                checked={values.customer_email_permission}
+                                                                                name="customer_email_permission"
+                                                                                onChange={handleChange}
+                                                                            />
+                                                                        </Form.Group>
+                                                                    </div>
+                                                                </div>
+                                                            </Tab>
+                                                        </Tabs>
+                                                    </div>
+
                                                    
                                                 </div>
                                             </div>
@@ -367,6 +455,32 @@ const CreateReservation = ({ show, handleClose }) => {
                                         onChange={handleChange} 
                                     />
                                 </Form.Group>
+                                <div className="row">
+                                    <div className="col-md-6">
+                                        <Form.Group>
+                                            <Form.Check
+                                                type="checkbox"
+                                                id="reservationSmsPermission"
+                                                label="SMS Gönderilsin"
+                                                checked={values.reservation_sms_permission}
+                                                name="reservation_sms_permission"
+                                                onChange={handleChange}
+                                            />
+                                        </Form.Group>
+                                    </div>
+                                    <div className="col-md-6">
+                                        <Form.Group>
+                                            <Form.Check
+                                                type="checkbox"
+                                                id="reservationEmailPermission"
+                                                label="E-posta Gönderilsin"
+                                                checked={values.reservation_email_permission}
+                                                name="reservation_email_permission"
+                                                onChange={handleChange}
+                                            />
+                                        </Form.Group>
+                                    </div>
+                                </div>
                             </div>
                             
                         </FormWizard.TabContent>
@@ -420,7 +534,7 @@ const CreateReservation = ({ show, handleClose }) => {
                 
                 {!finishButton ?
                  (<Button variant="primary" onClick={handelNext}>İleri</Button>) : 
-                 (<Button variant="success" onClick={handleComplete}>Rezervasyonu Tamamla</Button>)
+                 (<Button variant="success" onClick={handleComplete} disabled={isLoading}>Rezervasyonu Tamamla</Button>)
                 }
 
                 </Modal.Footer>
