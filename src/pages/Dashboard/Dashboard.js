@@ -196,7 +196,7 @@ function Dashboard() {
       
       {changeReservationShow && (
         <Suspense fallback={<div></div>}>
-          <ChangeReservationStatus modalItemId={modalItemId} setModalItemId={setModalItemId} title={'Durum Değiştir'} show={changeReservationShow} setShow={setChangeReservationShow} refreshMainData={fetchData}></ChangeReservationStatus>
+          <ChangeReservationStatus modalItemId={modalItemId} setModalItemId={setModalItemId} show={changeReservationShow} setShow={setChangeReservationShow} refreshMainData={fetchData}></ChangeReservationStatus>
         </Suspense>
       )}
 

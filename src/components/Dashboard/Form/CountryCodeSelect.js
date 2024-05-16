@@ -2,7 +2,7 @@ import { Form, Spinner } from 'react-bootstrap';
 import { getAll } from "../../../services/CountryCodeService";
 import { useState, useEffect  } from 'react';
 
-const CountryCodeSelect = ({value, handleChange}) => {
+const CountryCodeSelect = ({value, handleChange, name}) => {
 
     const [countryCodeData, setCountryCodeData] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -35,7 +35,7 @@ const CountryCodeSelect = ({value, handleChange}) => {
             <Form.Label>Telefon Kodu <strong style={{color: '#dd4814'}}>*</strong></Form.Label>
             <Form.Select 
                 aria-label="Default select example" 
-                name="telephone_code" 
+                name={name ?? "telephone_code"} 
                 value={value} 
                 onChange={handleChange} 
                 disabled={isLoading || error}

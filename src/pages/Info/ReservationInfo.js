@@ -137,6 +137,10 @@ function ReservationInfo() {
                                 <p></p>
                                 <hr /></div>) : ('')}
 
+                                {(reservationData.status == 2 || reservationData.status == 7) ? (<div className="text-success"><h5><FaCheck/> Rezervasyonunuz Konfirme Edilmiştir</h5>
+                                <p></p>
+                                <hr /></div>) : ('')}
+
                                 <h5 className="card-title">Rezervasyon Bilgileri</h5>
                                 <p className="card-text">
                                     Tarih: {dateTr(reservationData.date)} <br />

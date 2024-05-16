@@ -2,7 +2,7 @@ import { Form, Spinner } from 'react-bootstrap';
 import { getAll } from "../../../services/LevelService";
 import { useState, useEffect  } from 'react';
 
-const LevelSelect = ({value, handleChange}) => {
+const LevelSelect = ({value, handleChange, name}) => {
 
     const [levelData, setLevelData] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -35,7 +35,7 @@ const LevelSelect = ({value, handleChange}) => {
             <Form.Label>Seviye</Form.Label>
             <Form.Select 
                 aria-label="Default select example" 
-                name="level" 
+                name={name ?? "level"} 
                 value={value} 
                 onChange={handleChange} 
                 disabled={isLoading || error}

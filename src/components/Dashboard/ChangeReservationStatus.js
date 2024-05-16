@@ -1,15 +1,23 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Modal, Button, Spinner, Alert } from 'react-bootstrap';
 import { MdDateRange, MdCheckCircleOutline, MdAccessTime, MdPayment, MdBlock } from "react-icons/md";
 import { getById, reservationCanceled, reservationConfirm, askForConfirmation, bookAgain } from '../../services/ReservationService';
+import CustomerUpdateRef from '../../components/Dashboard/Form/CustomerUpdateRef';
+import CustomerUpdate from '../../components/Dashboard/Form/CustomerUpdate';
 import Swal from 'sweetalert2';
 
-const ChangeReservationStatus = ({ modalItemId, setModalItemId, title, show, setShow, refreshMainData }) => {
+const ChangeReservationStatus = ({ modalItemId, setModalItemId, show, setShow, refreshMainData }) => {
+
+    const formRef = useRef(null);
+    const [isCustomerUpdateFormDirty, setIsCustomerUpdateFormDirty] = useState(false);
+    const [isCustomerUpdateFormValid, setIsCustomerUpdateFormValid] = useState(true);
 
     const [reservationData, setReservationData] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
     const [refreshData, setRefreshData] = useState(null);
+    const [customerUpdateWindow, setCustomerUpdateWindow] = useState(null);
+    const [title, setTitle] = useState('Durum Değiştir');
 
     useEffect(() => {
         const fetchReservationData = async () => {
@@ -31,6 +39,18 @@ const ChangeReservationStatus = ({ modalItemId, setModalItemId, title, show, set
         };
 
         fetchReservationData();
+
+        const interval = setInterval(() => {
+            if (formRef.current) {
+                setIsCustomerUpdateFormDirty(formRef.current.isDirty);
+                setIsCustomerUpdateFormValid(formRef.current.isValid);
+            }
+        }, 100);
+        return () => clearInterval(interval);
+        /* if (formRef.current) {
+            setIsCustomerUpdateFormDirty(formRef.current.isDirty);
+            setIsCustomerUpdateFormValid(formRef.current.isValid);
+        } */
     }, [modalItemId, refreshData]);
 
     // Modalı kapama fonksiyonu
@@ -38,6 +58,12 @@ const ChangeReservationStatus = ({ modalItemId, setModalItemId, title, show, set
         setShow(false);
         //setModalItemId('');
     }
+
+    const customerUpdateHandleButtonClick = () => {
+        if (formRef.current) {
+            formRef.current.submitForm();
+        }
+    };
 
     const dateTr = (date) => {
         date = new Date(date);
@@ -300,9 +326,15 @@ const ChangeReservationStatus = ({ modalItemId, setModalItemId, title, show, set
         <Modal.Header closeButton>
             <Modal.Title>{title}</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body style={{ maxHeight: 'calc(100vh - 210px)', overflowY: 'auto' }}>
             {
-                isLoading ? (
+                customerUpdateWindow ? (
+                    <>
+                    <CustomerUpdateRef ref={formRef} customer_id={reservationData.customer_id} date={dateTr(reservationData.date + 'T' + reservationData.time)} number={reservationData.number_of_people} />
+                    {/* <CustomerUpdate customer_id={reservationData.customer_id} date={dateTr(reservationData.date + 'T' + reservationData.time)} number={reservationData.number_of_people} /> */}
+                    </>
+                    
+                ) : isLoading ? (
                     <div style={{display:'flex', justifyContent:'center', alignItems:'center', padding:30}}>
                         <Spinner animation="border" />
                     </div>
@@ -322,8 +354,8 @@ const ChangeReservationStatus = ({ modalItemId, setModalItemId, title, show, set
                                     <p className="mb-0 text-secondary">{reservationData.number_of_people} Misafir</p>
                                     <hr/>
                                     <div>
-                                        <button type="button" className="btn btn-secondary btn-sm mb-2">Düzenle</button>
-                                        <button type="button" className="btn btn-secondary btn-sm mb-2">Misafir Detayı</button>
+                                        <Button className="btn-sm mb-2" variant="secondary" onClick={() => {setCustomerUpdateWindow(true); setTitle('Misafir Bilgilerini Güncelle');}}>Düzenle</Button>
+                                        <Button className="btn-sm mb-2" variant="secondary" onClick={() => console.log("misafir detayı")}>Misafir Detayı</Button>
                                     </div>
 
                                     <div className="list-inline contacts-social mt-3"> 
@@ -349,9 +381,13 @@ const ChangeReservationStatus = ({ modalItemId, setModalItemId, title, show, set
             }
         </Modal.Body>
         <Modal.Footer>
-            <Button variant="secondary" onClick={handleClose}>
-            Kapat
-            </Button>
+            <Button variant="secondary" onClick={handleClose}>Kapat</Button>
+            {customerUpdateWindow && 
+                <>
+                    <Button variant="warning" onClick={() => {setCustomerUpdateWindow(false); setTitle('Durum Değiştir');}}>Geri Dön</Button>
+                    <Button variant="success" onClick={customerUpdateHandleButtonClick} disabled={!(isCustomerUpdateFormValid && isCustomerUpdateFormDirty)}>Misafir Bilgilerini Güncelle</Button>
+                </>
+            }
         </Modal.Footer>
         </Modal>
     );

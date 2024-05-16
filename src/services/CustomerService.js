@@ -28,6 +28,16 @@ const getByRestaurantId = async () => {
     }
 };
 
-export { getAll, getByRestaurantId };
+const getById = async (itemId) => {
+  try {
+    const response = await axiosInstance.get(`/customer/getById/${itemId}`);
+    return response.data;
+  } catch (error) {
+    console.error('API Hata:', error.message);
+    throw error;
+  }
+};
+
+export { getAll, getByRestaurantId, getById };
 
 

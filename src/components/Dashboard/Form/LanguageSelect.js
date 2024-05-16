@@ -2,7 +2,7 @@ import { Form, Spinner } from 'react-bootstrap';
 import { getAll } from "../../../services/LanguageService";
 import { useState, useEffect  } from 'react';
 
-const LanguageSelect = ({value, handleChange}) => {
+const LanguageSelect = ({value, handleChange, name}) => {
 
     const [languageData, setLanguageData] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -35,7 +35,7 @@ const LanguageSelect = ({value, handleChange}) => {
             <Form.Label>Dil</Form.Label>
             <Form.Select 
                 aria-label="Default select example" 
-                name="language" 
+                name={name ?? "language"} 
                 value={value} 
                 onChange={handleChange} 
                 disabled={isLoading || error}

@@ -49,3 +49,19 @@ export const createReservationSchema = (newCustomer) => {
     flower_order: Yup.string().max(3),
     platform: Yup.string().max(255),
   });
+
+  export const smallUpdateCustomerSchema = Yup.object().shape({
+    full_name: Yup.string().min(2).max(255).required(),
+    phone: Yup.number().typeError('Lütfen geçerli bir telefon numarası giriniz').required(),
+    country_telephone_code_id: Yup.number().integer().required(),
+    email: Yup.string().min(2).max(255).email(),
+    level_id: Yup.number().integer(),
+    language_code: Yup.string(),
+    customer_note: Yup.string().min(2).max(255),
+    birth_date: Yup.string(),
+    anniversary_date: Yup.string(),
+    gender: Yup.string().min(2).max(6),
+    assistant_full_name: Yup.string().min(2).max(255),
+    assistant_phone: Yup.number().typeError('Lütfen geçerli bir telefon numarası giriniz'),
+    assistant_email: Yup.string().min(2).max(255).email()
+  });
