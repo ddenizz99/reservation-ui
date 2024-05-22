@@ -24,6 +24,16 @@ const getByRestaurantId = async (date) => {
     }
 };
 
+const getByRestaurantIdMain = async (reservationData) => {
+  try {
+    const response = await axiosInstance.post('/reservation/getByRestaurantIdMain', reservationData);
+    return response.data;
+  } catch (error) {
+    console.error('Kayıt Hata:', error.message);
+    throw error;
+  }
+}
+
 const getByInfoCode = async (code) => {
   try {
     const response = await axiosInstance.get('/info/getByInfoCode/' + code);
@@ -37,6 +47,16 @@ const getByInfoCode = async (code) => {
 const getById = async (itemId) => {
   try {
     const response = await axiosInstance.get(`/reservation/getById/${itemId}`);
+    return response.data;
+  } catch (error) {
+    console.error('API Hata:', error.message);
+    throw error;
+  }
+};
+
+const getByCustomerId = async (itemId) => {
+  try {
+    const response = await axiosInstance.get(`/reservation/getByCustomerId/${itemId}`);
     return response.data;
   } catch (error) {
     console.error('API Hata:', error.message);
@@ -157,6 +177,7 @@ const getByRestaurantIdAreaAndTable = async () => {
 export { 
   addReservation, 
   getByRestaurantId, 
+  getByRestaurantIdMain,
   getById, 
   getByInfoCode, 
   reservationCanceledCustomer, 
@@ -169,7 +190,8 @@ export {
   changeAreaAndTable,
   changeNumberOfPeople,
   changeReservationInfoApi,
-  reservationConfirmCustomer
+  reservationConfirmCustomer,
+  getByCustomerId
 };
 
 

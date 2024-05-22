@@ -2,8 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { Modal, Button, Spinner, Alert } from 'react-bootstrap';
 import { MdDateRange, MdCheckCircleOutline, MdAccessTime, MdPayment, MdBlock } from "react-icons/md";
 import { getById, reservationCanceled, reservationConfirm, askForConfirmation, bookAgain } from '../../services/ReservationService';
-import CustomerUpdateRef from '../../components/Dashboard/Form/CustomerUpdateRef';
-import CustomerUpdate from '../../components/Dashboard/Form/CustomerUpdate';
+import UpdateCustomer from '../../components/Dashboard/Form/UpdateCustomer'; 
 import Swal from 'sweetalert2';
 
 const ChangeReservationStatus = ({ modalItemId, setModalItemId, show, setShow, refreshMainData }) => {
@@ -329,10 +328,7 @@ const ChangeReservationStatus = ({ modalItemId, setModalItemId, show, setShow, r
         <Modal.Body style={{ maxHeight: 'calc(100vh - 210px)', overflowY: 'auto' }}>
             {
                 customerUpdateWindow ? (
-                    <>
-                    <CustomerUpdateRef ref={formRef} customer_id={reservationData.customer_id} date={dateTr(reservationData.date + 'T' + reservationData.time)} number={reservationData.number_of_people} />
-                    {/* <CustomerUpdate customer_id={reservationData.customer_id} date={dateTr(reservationData.date + 'T' + reservationData.time)} number={reservationData.number_of_people} /> */}
-                    </>
+                    <UpdateCustomer ref={formRef} customer_id={reservationData.customer_id} date={dateTr(reservationData.date + 'T' + reservationData.time)} number={reservationData.number_of_people} refreshMainData={refreshMainData} />
                     
                 ) : isLoading ? (
                     <div style={{display:'flex', justifyContent:'center', alignItems:'center', padding:30}}>

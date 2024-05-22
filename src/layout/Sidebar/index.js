@@ -18,6 +18,12 @@ function SidebarLayout() {
       url: '/customers'
     },
     {
+      title: 'Raporlar',
+      icon: 'bx bxs-report',
+      iconColor: 'parent-icon icon-color-2',
+      url: '/reporting'
+    }
+    /* {
       title: 'Değerlendirmeler',
       icon: 'bx lni-comments-alt',
       iconColor: 'parent-icon icon-color-5',
@@ -36,19 +42,19 @@ function SidebarLayout() {
       subItems: [
         { title: 'Kampanyalar', url: '/campaigns' }
       ]
-    },
-    {
+    }, */
+    /* {
       title: 'Raporlar',
       icon: 'bx bxs-report',
       iconColor: 'parent-icon icon-color-2',
       subItems: [
-        { title: 'Genel', url: '#' },
+        { title: 'Genel', url: '/reporting' },
         { title: 'Misafirler', url: '#' },
         { title: 'Walk-In', url: '#' },
         { title: 'Sağlayıcılar', url: '#' },
         { title: 'Değerlendirmeler', url: '#' }
       ]
-    }
+    } */
     // Diğer menü öğelerini buraya ekleyin
   ];
 

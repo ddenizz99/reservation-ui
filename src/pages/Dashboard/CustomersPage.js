@@ -1,8 +1,10 @@
 import DataTable, { createTheme } from 'react-data-table-component';
 import { useSelector } from 'react-redux';
+import { NavLink } from 'react-router-dom';
 import LoadingIndicator from '../../components/Dashboard/LoadingIndicator';
 import { useEffect, useState } from 'react';
 import { getByRestaurantId } from '../../services/CustomerService';
+import InfoCard from '../../components/Dashboard/InfoCard';
 
 function CustomersPage() {
 
@@ -37,22 +39,26 @@ function CustomersPage() {
         {
             name: 'No',
             selector: row => row.id,
-            sortable: true
+            sortable: true,
+            cell: row => <NavLink to={`/customer/detail/${row.id}`}>{row.id}</NavLink>
         },
         {
           name: 'Ad Soyad',
           selector: row => row.full_name,
-          sortable: true
+          sortable: true,
+          cell: row => <NavLink to={`/customer/detail/${row.id}`}>{row.full_name}</NavLink>
         },
         {
           name: 'Telefon',
           selector: row => row.phone,
-          sortable: true
+          sortable: true,
+          cell: row => <NavLink to={`/customer/detail/${row.id}`}>{row.phone}</NavLink>
         },
         {
           name: 'E-posta',
           selector: row => row.email,
-          sortable: true
+          sortable: true,
+          cell: row => <NavLink to={`/customer/detail/${row.id}`}>{row.email}</NavLink>
         }
     ];   
     
@@ -78,8 +84,118 @@ function CustomersPage() {
         },
     }, 'dark');
 
+    const countVip = () => {
+        var result = customerData.reduce(function (acc, cur) {
+            return cur.vip === '1' ? acc + 1 : acc;
+        }, 0);
+        return result;
+    }
+
+    const countLevel = (level) => {
+      var result = customerData.reduce(function (acc, cur) {
+          return cur.level_id == level ? acc + 1 : acc;
+      }, 0);
+      return result;
+  }
+
     return (
         <div className="row">
+            <div className="col-12 col-lg-4">
+                <InfoCard
+                    title="Misafir"
+                    value={customerData.length}
+                    icon="bx-user"
+                    backGround="voilet"
+                    isLoading={isLoading}
+                />
+            </div>
+            <div className="col-12 col-lg-4">
+                <InfoCard
+                    title="VIP"
+                    value={countVip()}
+                    icon="bx-shield-alt-2"
+                    backGround="rose"
+                    isLoading={isLoading}
+                />
+            </div>
+            <div className="col-12 col-lg-4">
+                <InfoCard
+                    title="Şirket"
+                    value={2}
+                    icon="bx-buildings"
+                    backGround="sunset"
+                    isLoading={isLoading}
+                />
+            </div>
+            <div className="col-12">
+              <h4>Listelere Göre Dağılım</h4>
+              <hr/>
+              <div className='row mt-3'>
+                <div className="col-lg-3">
+                  <InfoCard
+                      title="Büyük Harcama"
+                      value={countLevel(1)}
+                      icon="bx-star"
+                      backGround="sunset"
+                      isLoading={isLoading}
+                  />
+                </div>
+                <div className="col-lg-3">
+                  <InfoCard
+                      title="İyi Harcama"
+                      value={countLevel(2)}
+                      icon="bx-star"
+                      backGround="sunset"
+                      isLoading={isLoading}
+                  />
+                </div>
+                <div className="col-lg-3">
+                  <InfoCard
+                      title="Düşük Harcama"
+                      value={countLevel(3)}
+                      icon="bx-star"
+                      backGround="sunset"
+                      isLoading={isLoading}
+                  />
+                </div>
+                <div className="col-lg-3">
+                  <InfoCard
+                      title="Normal Müşteri"
+                      value={countLevel(4)}
+                      icon="bx-star"
+                      backGround="sunset"
+                      isLoading={isLoading}
+                  />
+                </div>
+                <div className="col-lg-3">
+                  <InfoCard
+                      title="Potansiyel Müşteri"
+                      value={countLevel(5)}
+                      icon="bx-star"
+                      backGround="sunset"
+                      isLoading={isLoading}
+                  />
+                </div>
+                <div className="col-lg-3">
+                  <InfoCard
+                      title="Kara Liste"
+                      value={countLevel(6)}
+                      icon="bx-block"
+                      backGround="secondary"
+                      isLoading={isLoading}
+                  />
+                </div>
+                <div className="col-lg-3">
+                  <InfoCard
+                      title="Kayıp Müşteri"
+                      value={countLevel(7)}
+                      icon="bx-block"
+                      backGround="secondary"
+                      isLoading={isLoading}
+                  />
+                </div>
+              </div>
+            </div>
             <div className="col-12">
                 <div className="card radius-15">
                     <div className="card-body">

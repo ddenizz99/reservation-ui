@@ -19,21 +19,21 @@ export const createReservationSchema = (newCustomer) => {
       full_name: newCustomer ? Yup.string().min(2).max(255).required() : Yup.string().notRequired(),
       phone: newCustomer ? Yup.number().typeError('Lütfen geçerli bir telefon numarası giriniz').required() : Yup.number().notRequired(),
       telephone_code: newCustomer ? Yup.number().integer().required() : Yup.number().integer().notRequired(),
-      email: Yup.string().min(2).max(255).email(),
-      level: Yup.number().integer(),
-      language: Yup.string(),
-      customer_note: Yup.string().min(2).max(255),
+      email: Yup.string().min(2).max(255).email().notRequired(),
+      level: Yup.number().integer().notRequired(),
+      language: Yup.string().notRequired(),
+      customer_note: Yup.string().min(2).max(255).notRequired(),
       number_of_people: Yup.number().min(1).integer().required(),
       location: Yup.number().integer().required(),
-      reservation_note: Yup.string().min(2).max(255),
+      reservation_note: Yup.string().min(2).max(255).notRequired(),
       date: Yup.string().required(),
       time: Yup.string().required(),
-      cake_order: Yup.string().max(3),
-      flower_order: Yup.string().max(3),
-      platform: Yup.string().max(255),
-      assistant_full_name: Yup.string().min(2).max(255),
-      assistant_phone: Yup.number().typeError('Lütfen geçerli bir telefon numarası giriniz'),
-      assistant_email: Yup.string().min(2).max(255).email()
+      cake_order: Yup.string().max(3).notRequired(),
+      flower_order: Yup.string().max(3).notRequired(),
+      platform: Yup.string().max(255).notRequired(),
+      assistant_full_name: Yup.string().min(2).max(255).notRequired(),
+      assistant_phone: Yup.number().typeError('Lütfen geçerli bir telefon numarası giriniz').notRequired(),
+      assistant_email: Yup.string().min(2).max(255).email().notRequired()
     });
   };
 
@@ -44,24 +44,24 @@ export const createReservationSchema = (newCustomer) => {
 
   export const changeReservationInfoSchema = Yup.object().shape({
     reservation_id: Yup.number().required(),
-    notes: Yup.string(),
-    cake_order: Yup.string().max(3),
-    flower_order: Yup.string().max(3),
-    platform: Yup.string().max(255),
+    notes: Yup.string().notRequired(),
+    cake_order: Yup.string().max(3).notRequired(),
+    flower_order: Yup.string().max(3).notRequired(),
+    platform: Yup.string().max(255).notRequired()
   });
 
-  export const smallUpdateCustomerSchema = Yup.object().shape({
+  export const updateCustomerSchema = Yup.object().shape({
     full_name: Yup.string().min(2).max(255).required(),
     phone: Yup.number().typeError('Lütfen geçerli bir telefon numarası giriniz').required(),
     country_telephone_code_id: Yup.number().integer().required(),
-    email: Yup.string().min(2).max(255).email(),
-    level_id: Yup.number().integer(),
-    language_code: Yup.string(),
-    customer_note: Yup.string().min(2).max(255),
-    birth_date: Yup.string(),
-    anniversary_date: Yup.string(),
-    gender: Yup.string().min(2).max(6),
-    assistant_full_name: Yup.string().min(2).max(255),
-    assistant_phone: Yup.number().typeError('Lütfen geçerli bir telefon numarası giriniz'),
-    assistant_email: Yup.string().min(2).max(255).email()
+    email: Yup.string().min(2).max(255).email().notRequired(),
+    level_id: Yup.number().integer().notRequired(),
+    language_code: Yup.string().notRequired(),
+    customer_note: Yup.string().min(2).max(255).notRequired(),
+    birth_date: Yup.string().notRequired(),
+    anniversary_date: Yup.string().notRequired(),
+    gender: Yup.string().min(2).max(6).notRequired(),
+    assistant_full_name: Yup.string().min(2).max(255).notRequired(),
+    assistant_phone: Yup.number().typeError('Lütfen geçerli bir telefon numarası giriniz').notRequired(),
+    assistant_email: Yup.string().min(2).max(255).email().notRequired()
   });

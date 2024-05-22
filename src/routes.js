@@ -8,6 +8,9 @@ import Page404 from "./pages/Dashboard/Page404";
 import InfoLayout from "./layout/Info";
 import ReservationInfo from "./pages/Info/ReservationInfo";
 import CustomersPage from "./pages/Dashboard/CustomersPage";
+import CustomerDetail from "./pages/Dashboard/CustomerDetail";
+import CustomerEdit from "./pages/Dashboard/CustomerEdit";
+import ReportingPage from "./pages/Dashboard/ReportingPage";
 
 const routes = [
     {
@@ -25,6 +28,18 @@ const routes = [
             {
                 path: 'blank-page',
                 element: <Blank />
+            },
+            {
+                path: '/customer/detail/:id',
+                element: <CustomerDetail />
+            },
+            {
+                path: '/customer/edit/:id',
+                element: <CustomerEdit />
+            },
+            {
+                path: '/reporting',
+                element: <ReportingPage />
             },
             {
                 path: '*',

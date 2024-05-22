@@ -38,6 +38,26 @@ const getById = async (itemId) => {
   }
 };
 
-export { getAll, getByRestaurantId, getById };
+const getByIdCustomerDetail = async (itemId) => {
+  try {
+    const response = await axiosInstance.get(`/customer/getByIdCustomerDetail/${itemId}`);
+    return response.data;
+  } catch (error) {
+    console.error('API Hata:', error.message);
+    throw error;
+  }
+};
+
+const updateCustomer = async (customerData) => {
+  try {
+    const response = await axiosInstance.post('/customer/updateCustomer', customerData);
+    return response.data;
+  } catch (error) {
+    console.error('Kayıt Hata:', error.message);
+    throw error;
+  }
+}
+
+export { getAll, getByRestaurantId, getById, updateCustomer, getByIdCustomerDetail };
 
 

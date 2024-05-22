@@ -43,17 +43,17 @@ function NavbarLayout() {
                 </a>
               </li>
               <li className="nav-item dropdown dropdown-lg">
-                <a className="nav-link dropdown-toggle dropdown-toggle-nocaret position-relative" href="#" onClick={() => console.log('Clicked!')} data-bs-toggle="dropdown">	<span className="msg-count">6</span>
+                <a className="nav-link dropdown-toggle dropdown-toggle-nocaret position-relative" href="#" onClick={() => console.log('Clicked!')} data-bs-toggle="dropdown">	<span className="msg-count">0</span>
                   <i className="bx bx-comment-detail vertical-align-middle" />
                 </a>
                 <div className="dropdown-menu dropdown-menu-end">
                   <a href="#" onClick={() => console.log('Clicked!')}>
                     <div className="msg-header">
-                      <h6 className="msg-header-title">6 Yeni Mesaj</h6>
+                      <h6 className="msg-header-title">0 Yeni Mesaj</h6>
                       <p className="msg-header-subtitle">Mesajlar</p>
                     </div>
                   </a>
-                  <PerfectScrollbar className="header-message-list" style={{height:400}}>
+                  {/* <PerfectScrollbar className="header-message-list" style={{height:400}}>
                     <a className="dropdown-item" href="#" onClick={() => console.log('Clicked!')}>
                       <div className="d-flex align-items-center">
                         <div className="user-online">
@@ -186,24 +186,24 @@ function NavbarLayout() {
                         </div>
                       </div>
                     </a>
-                  </PerfectScrollbar>
+                  </PerfectScrollbar> */}
                   <a href="#" onClick={() => console.log('Clicked!')}>
-                    <div className="text-center msg-footer">View All Messages</div>
+                    <div className="text-center msg-footer">Tümünü Gör</div>
                   </a>
                 </div>
               </li>
               <li className="nav-item dropdown dropdown-lg">
                 <a className="nav-link dropdown-toggle dropdown-toggle-nocaret position-relative" href="#" onClick={() => console.log('Clicked!')} data-bs-toggle="dropdown">	<i className="bx bx-bell vertical-align-middle" />
-                  <span className="msg-count">8</span>
+                  <span className="msg-count">0</span>
                 </a>
                 <div className="dropdown-menu dropdown-menu-end">
                   <a href="#" onClick={() => console.log('Clicked!')}>
                     <div className="msg-header">
-                      <h6 className="msg-header-title">8 Yeni Bildirim</h6>
+                      <h6 className="msg-header-title">0 Yeni Bildirim</h6>
                       <p className="msg-header-subtitle">Bildirimler</p>
                     </div>
                   </a>
-                  <PerfectScrollbar className="header-notifications-list" style={{height:400}}>
+                  {/* <PerfectScrollbar className="header-notifications-list" style={{height:400}}>
                     <a className="dropdown-item" href="#" onClick={() => console.log('Clicked!')}>
                       <div className="d-flex align-items-center">
                         <div className="notify bg-light-primary text-primary"><i className="bx bx-group" />
@@ -302,9 +302,9 @@ function NavbarLayout() {
                         </div>
                       </div>
                     </a>
-                  </PerfectScrollbar>
+                  </PerfectScrollbar> */}
                   <a href="#" onClick={() => console.log('Clicked!')}>
-                    <div className="text-center msg-footer">View All Notifications</div>
+                    <div className="text-center msg-footer">Tümünü Gör</div>
                   </a>
                 </div>
               </li>
@@ -315,7 +315,7 @@ function NavbarLayout() {
                       <p className="user-name mb-0">{userData.full_name}</p>
                       <p className="designattion mb-0">{userData.restaurant_name}</p>
                     </div>
-                    <img src="tda.jpg" className="user-img" alt="user avatar" />
+                    <img src="/tda.jpg" className="user-img" alt="user avatar" />
                   </div>
                 </a>
                 <div className="dropdown-menu dropdown-menu-end">	
@@ -335,12 +335,13 @@ function NavbarLayout() {
                   </div>
                 </a>
                 <div className="dropdown-menu dropdown-menu-end">
-                  <a className="dropdown-item" href="#" onClick={() => console.log('Clicked!')}><i className="flag-icon flag-icon-de" /><span>German</span></a>
+                  <a className="dropdown-item" href="#" onClick={() => console.log('Clicked!')}><i className="flag-icon flag-icon-um" /><span>English</span></a>
+                  {/* <a className="dropdown-item" href="#" onClick={() => console.log('Clicked!')}><i className="flag-icon flag-icon-de" /><span>German</span></a>
                   <a className="dropdown-item" href="#" onClick={() => console.log('Clicked!')}><i className="flag-icon flag-icon-fr" /><span>French</span></a>
                   <a className="dropdown-item" href="#" onClick={() => console.log('Clicked!')}><i className="flag-icon flag-icon-um" /><span>English</span></a>
                   <a className="dropdown-item" href="#" onClick={() => console.log('Clicked!')}><i className="flag-icon flag-icon-in" /><span>Hindi</span></a>
                   <a className="dropdown-item" href="#" onClick={() => console.log('Clicked!')}><i className="flag-icon flag-icon-cn" /><span>Chinese</span></a>
-                  <a className="dropdown-item" href="#" onClick={() => console.log('Clicked!')}><i className="flag-icon flag-icon-ae" /><span>Arabic</span></a>
+                  <a className="dropdown-item" href="#" onClick={() => console.log('Clicked!')}><i className="flag-icon flag-icon-ae" /><span>Arabic</span></a> */}
                 </div>
               </li>
             </ul>

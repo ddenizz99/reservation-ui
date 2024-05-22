@@ -4,23 +4,25 @@ import { Modal, Button, Alert, Form, Tabs, Tab, Spinner } from 'react-bootstrap'
 import { FaCalendarAlt } from "react-icons/fa";
 import DatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import Swal from 'sweetalert2';
 import LanguageSelect from "./LanguageSelect";
 import CountryCodeSelect from "./CountryCodeSelect";
 import LevelSelect from './LevelSelect';
-import { getById } from '../../../services/CustomerService';
-import { smallUpdateCustomerSchema } from '../../../utils/validations/GlobalSchema';
+import { getById, updateCustomer } from '../../../services/CustomerService';
+import { updateCustomerSchema } from '../../../utils/validations/GlobalSchema';
 
-const CustomerUpdateRef = forwardRef((props, ref) => {
+const UpdateCustomer = forwardRef((props, ref) => {
 
     const [customerData, setCustomerData] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
     const [refreshData, setRefreshData] = useState(null);
     const [initialData, setInitialData] = useState({
+        customer_id: '',
         full_name: '',
         phone: '',
-        birth_date:'',
-        anniversary_date: '',
+        birth_date: new Date(),
+        anniversary_date: new Date(),
         email: '',
         language_code: 'tr',
         country_telephone_code_id: '237',
@@ -42,10 +44,11 @@ const CustomerUpdateRef = forwardRef((props, ref) => {
                 if(result.success){
                     setCustomerData(result.data);
                     setInitialData({
+                        customer_id: props.customer_id ?? '',
                         full_name: result.data.full_name ?? '',
                         phone: result.data.phone ?? '',
-                        birth_date:result.data.birth_date ?? '',
-                        anniversary_date: result.data.anniversary_date ?? '',
+                        birth_date: (result.data.birth_date ==! null || result.data.birth_date ==! '') ? new Date(result.data.birth_date + 'T00:00:00') : null,
+                        anniversary_date: (result.data.anniversary_date ==! null || result.data.anniversary_date ==! '') ? new Date(result.data.anniversary_date + 'T00:00:00') : null,
                         email: result.data.email ?? '',
                         language_code: result.data.language_code ?? 'tr',
                         country_telephone_code_id: result.data.country_telephone_code_id ?? '237',
@@ -70,38 +73,48 @@ const CustomerUpdateRef = forwardRef((props, ref) => {
 
         fetchCustomerData();
         //alert(JSON.stringify(customerData));
-    }, []);
+    }, [refreshData]);
 
     /*FORM*/
 
     const formik = useFormik({
         initialValues: initialData,
         enableReinitialize: true,
-        validationSchema: smallUpdateCustomerSchema,
-        onSubmit: (values) => {
-          console.log(JSON.stringify(values, null, 2));
-          /* formik.values.date = formatDateToDatabaseFormat(formik.values.date);
+        validationSchema: updateCustomerSchema,
+        onSubmit: async (values) => {
+            values.birth_date = formatDateToDatabaseFormat(values.birth_date);
+            values.anniversary_date = formatDateToDatabaseFormat(values.anniversary_date);
+            
+            //console.log(JSON.stringify(values, null, 2));
+          
             setError('');
             setIsLoading(true);
             
-            await addReservation(values)
+            await updateCustomer(values)
                 .then(result => {
                     if(result.success){
-                        setIsLoading(false);
-                        toast.success(result.message);
-                        CreateReservationDestroy();
-                        handleClose();
+                        Swal.fire({
+                            title: "Başarılı!",
+                            text: result.message,
+                            icon: "success",
+                            confirmButtonText: "Tamam"
+                        });
+                        setRefreshData(Math.floor(Math.random() * 10));
+                        //main data
+                        props.refreshMainData();
                     }else{
-                        setIsLoading(false);
-                        setError(result.message);
-                        toast.error(result.message);
+                        Swal.fire({
+                            title: "Başarısız!",
+                            text: result.message,
+                            icon: "error",
+                            confirmButtonText: "Tamam"
+                        });
                     }
                 }).catch(result => {
                     setIsLoading(false);
                     setError(String(result));
-                    toast.error(String(result));
-                }); */
-        },
+                });
+        }
     });
 
     useImperativeHandle(ref, () => ({
@@ -109,6 +122,31 @@ const CustomerUpdateRef = forwardRef((props, ref) => {
         isDirty: formik.dirty,
         isValid: formik.isValid,
     }));
+
+    const isValidDate = (date) => {
+        return date instanceof Date && !isNaN(date);
+    };
+
+    function formatDateToDatabaseFormat(date, time = 'day') {
+        date = new Date(date);
+        if (time === 'full') {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            const hour = String(date.getHours()).padStart(2, '0');
+            const minute = String(date.getMinutes()).padStart(2, '0');
+            const second = String(date.getSeconds()).padStart(2, '0');
+        
+            return `${year}-${month}-${day} ${hour}:${minute}:${second}`;
+        }else{
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+
+            return `${year}-${month}-${day}`;
+        }
+    
+    }
 
     return (
         <>
@@ -202,9 +240,14 @@ const CustomerUpdateRef = forwardRef((props, ref) => {
                                                         showIcon
                                                         locale="tr"
                                                         selected={formik.values.birth_date}
-                                                        onChange={(date) => formik.setFieldValue('birth_date', date, false)}
-                                                        dateFormat="yyyy-MM-dd"
+                                                        onChange={(date) => {
+                                                            if (isValidDate(date)) {
+                                                                formik.setFieldValue('birth_date', date, false);
+                                                            } 
+                                                        }}
+                                                        dateFormat="dd/MM/yyyy"
                                                         className='form-control'
+                                                        placeholderText="Gün/Ay/Yıl"
                                                     />
                                                     {formik.touched.birth_date && formik.errors.birth_date ? (
                                                         <div className="validation-error-span">{formik.errors.birth_date}</div>
@@ -219,9 +262,14 @@ const CustomerUpdateRef = forwardRef((props, ref) => {
                                                         showIcon
                                                         locale="tr"
                                                         selected={formik.values.anniversary_date}
-                                                        onChange={(date) => formik.setFieldValue('anniversary_date', date, false)}
-                                                        dateFormat="yyyy-MM-dd"
+                                                        onChange={(date) => {
+                                                            if (isValidDate(date)) {
+                                                                formik.setFieldValue('anniversary_date', date, false)
+                                                            } 
+                                                        }}
+                                                        dateFormat="dd/MM/yyyy"
                                                         className='form-control'
+                                                        placeholderText="Gün/Ay/Yıl"
                                                     />
                                                     {formik.touched.anniversary_date && formik.errors.anniversary_date ? (
                                                         <div className="validation-error-span">{formik.errors.anniversary_date}</div>
@@ -316,4 +364,4 @@ const CustomerUpdateRef = forwardRef((props, ref) => {
     );
 });
 
-export default CustomerUpdateRef;
+export default UpdateCustomer;

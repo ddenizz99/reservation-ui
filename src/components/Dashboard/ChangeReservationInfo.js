@@ -1,13 +1,21 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Modal, Button, Spinner, Alert, Form } from 'react-bootstrap';
+import { NavLink, useLocation } from 'react-router-dom';
 import { getById, changeReservationInfoApi } from '../../services/ReservationService';
 import { useFormik, ErrorMessage  } from "formik";
 import Swal from 'sweetalert2';
 import TagsSelection from './Form/TagsSelection';
 import PlatformSelect from './Form/PlatformSelect';
+import UpdateCustomer from '../../components/Dashboard/Form/UpdateCustomer';
 import { changeReservationInfoSchema } from '../../utils/validations/GlobalSchema';
 
-const ChangeReservationInfo = ({ modalItemId, setModalItemId, title, show, setShow, refreshMainData }) => {
+const ChangeReservationInfo = ({ modalItemId, setModalItemId, show, setShow, refreshMainData }) => {
+
+    const formRef = useRef(null);
+    const [isCustomerUpdateFormDirty, setIsCustomerUpdateFormDirty] = useState(false);
+    const [isCustomerUpdateFormValid, setIsCustomerUpdateFormValid] = useState(true);
+    const [customerUpdateWindow, setCustomerUpdateWindow] = useState(null);
+    const [title, setTitle] = useState('Rezervasyon Bilgilerini Düzenle');
 
     const [reservationData, setReservationData] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -54,6 +62,14 @@ const ChangeReservationInfo = ({ modalItemId, setModalItemId, title, show, setSh
         };
 
         fetchReservationData();
+
+        const interval = setInterval(() => {
+            if (formRef.current) {
+                setIsCustomerUpdateFormDirty(formRef.current.isDirty);
+                setIsCustomerUpdateFormValid(formRef.current.isValid);
+            }
+        }, 100);
+        return () => clearInterval(interval);
         
     }, [modalItemId, refreshData]);
 
@@ -105,6 +121,12 @@ const ChangeReservationInfo = ({ modalItemId, setModalItemId, title, show, setSh
         display:'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column'
     }
 
+    const customerUpdateHandleButtonClick = () => {
+        if (formRef.current) {
+            formRef.current.submitForm();
+        }
+    };
+
     return (
         <Modal 
             show={show} 
@@ -118,9 +140,12 @@ const ChangeReservationInfo = ({ modalItemId, setModalItemId, title, show, setSh
         <Modal.Header closeButton>
             <Modal.Title>{title}</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body style={{ maxHeight: 'calc(100vh - 210px)', overflowY: 'auto' }}>
             {
-                isLoading ? (
+                customerUpdateWindow ? (
+                    <UpdateCustomer ref={formRef} customer_id={reservationData.customer_id} date={dateTr(reservationData.date + 'T' + reservationData.time)} number={reservationData.number_of_people} refreshMainData={refreshMainData} />
+                    
+                ) : isLoading ? (
                     <div style={{display:'flex', justifyContent:'center', alignItems:'center', padding:30}}>
                         <Spinner animation="border" />
                     </div>
@@ -140,8 +165,10 @@ const ChangeReservationInfo = ({ modalItemId, setModalItemId, title, show, setSh
                                     <p className="mb-0 text-secondary">{reservationData.number_of_people} Misafir</p>
                                     <hr/>
                                     <div>
-                                        <button type="button" className="btn btn-secondary btn-sm mb-2">Düzenle</button>
-                                        <button type="button" className="btn btn-secondary btn-sm mb-2">Misafir Detayı</button>
+                                        <Button className="btn-sm mb-2" variant="secondary" onClick={() => {setCustomerUpdateWindow(true); setTitle('Misafir Bilgilerini Güncelle');}}>Düzenle</Button>
+                                        <NavLink to={`/customer/detail/${reservationData.customer_id}`}>
+                                            <Button className="btn-sm mb-2" variant="secondary" onClick={() => console.log("misafir detayı")}>Misafir Detayı</Button>
+                                        </NavLink>
                                     </div>
 
                                     <div className="list-inline contacts-social mt-3"> 
@@ -263,9 +290,13 @@ const ChangeReservationInfo = ({ modalItemId, setModalItemId, title, show, setSh
             <Button variant="secondary" onClick={handleClose}>
             Kapat
             </Button>
-            <Button variant="success" disabled={!(dirty && isValid)} onClick={handleSubmit}>
-            Güncelle
-            </Button>
+            {customerUpdateWindow ? 
+                (<>
+                    <Button variant="warning" onClick={() => {setCustomerUpdateWindow(false); setTitle('Durum Değiştir');}}>Geri Dön</Button>
+                    <Button variant="success" onClick={customerUpdateHandleButtonClick} disabled={!(isCustomerUpdateFormValid && isCustomerUpdateFormDirty)}>Misafir Bilgilerini Güncelle</Button>
+                </>)
+                : (<Button variant="success" disabled={!(dirty && isValid)} onClick={handleSubmit}>Güncelle</Button>)
+            }
         </Modal.Footer>
         </Modal>
     );
